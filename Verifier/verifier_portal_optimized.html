@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Verifier Portal - Optimized</title>
+<style>
+:root{--blue:#123f73;--blue2:#0b2b50;--yellow:#f7c948;--bg:#f4f6f8;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--green:#16a34a;--red:#dc2626;--orange:#f59e0b;--line:#e5e7eb;--purple:#7c3aed;--softblue:#eaf1f9}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;padding:22px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:24px;font-weight:950}.subtitle{font-size:13px;opacity:.88;margin-top:4px}.user{text-align:right;font-size:14px}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.14);margin-top:6px;font-size:12px}
+.layout{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 82px)}
+.sidebar{background:white;border-right:1px solid var(--line);padding:18px}
+.nav button{width:100%;border:0;background:transparent;text-align:left;padding:14px;border-radius:12px;font-size:16px;font-weight:800;color:#334155;margin-bottom:8px;cursor:pointer}
+.nav button.active,.nav button:hover{background:var(--softblue);color:var(--blue)}
+.rolebox{margin-top:22px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.4}
+.main{padding:24px;max-width:1360px}.tab{display:none}.tab.active{display:block}
+.page-title{font-size:28px;font-weight:950;margin:0 0 4px}.page-sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;gap:16px}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.04)}
+.card h2,.card h3{margin-top:0}.stat{font-size:34px;font-weight:950;margin:6px 0}.stat.small{font-size:24px}
+.label{font-size:13px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.good{color:var(--green)}.warn{color:var(--orange)}.bad{color:var(--red)}.purple{color:var(--purple)}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--blue);color:white;font-weight:850;cursor:pointer;margin:4px 4px 4px 0}
+.btn.secondary{background:#e5e7eb;color:#111827}.btn.yellow{background:var(--yellow);color:#111827}.btn.danger{background:var(--red)}.btn.greenbtn{background:var(--green)}.btn.full{width:100%;margin-top:10px}.btn.disabled{background:#9ca3af;cursor:not-allowed}
+.bigbtn{padding:18px 16px;font-size:17px;border-radius:16px}
+.tag{display:inline-block;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:850;white-space:nowrap;margin:2px}
+.tag.green{background:#dcfce7;color:#166534}.tag.red{background:#fee2e2;color:#991b1b}.tag.yellow{background:#fef3c7;color:#92400e}.tag.blue{background:#dbeafe;color:#1e40af}.tag.gray{background:#f3f4f6;color:#374151}.tag.purple{background:#ede9fe;color:#5b21b6}
+.table-wrap{width:100%;overflow-x:auto}.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+.table th{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;background:#f8fafc}
+.section{margin-top:22px}.notice{border-left:5px solid var(--yellow);background:#fffbeb;padding:14px;border-radius:12px;margin-bottom:16px}.info{border-left:5px solid var(--blue);background:#eff6ff;padding:14px;border-radius:12px;margin-bottom:16px}.locked{border-left:5px solid var(--red);background:#fef2f2;padding:14px;border-radius:12px;margin-bottom:16px}
+.formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font-size:15px;background:white}
+textarea{min-height:90px}label{display:block;font-weight:800;margin:10px 0 6px}
+.ready-banner{border:4px solid #bbf7d0;background:#f0fdf4;border-radius:26px;padding:24px;margin:18px 0;color:#14532d}
+.ready-banner h2{font-size:34px;margin:0 0 10px}
+.ready-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.ready-item{background:white;border:1px solid #bbf7d0;border-radius:14px;padding:12px;font-weight:850}
+.route-banner{border:3px solid #ddd6fe;background:#faf5ff;border-radius:24px;padding:22px;margin:18px 0}.route-banner h2{font-size:30px;margin:0 0 8px;color:#5b21b6}.route-big{font-size:38px;font-weight:950;color:#5b21b6;margin:8px 0}
+.driver-task-list{display:grid;gap:10px}.driver-task{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px}
+.quick-contact{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px}.quick-contact.manager{border-left:7px solid var(--blue)}.quick-contact.driver{border-left:7px solid var(--purple)}.quick-contact.dispatch{border-left:7px solid var(--orange)}.quick-contact.chief{border-left:7px solid var(--green)}.quick-contact .name{font-size:22px;font-weight:950;margin-bottom:4px}.quick-contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.checkrow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px;margin:8px 0}
+.compliance-item{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;margin:10px 0}.compliance-head{display:grid;grid-template-columns:1fr 180px;gap:12px;align-items:center}.noncompliance-required{display:none;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;padding:12px;border-radius:14px;background:#fff7ed;border:1px solid #fed7aa}.compliance-item.show-required .noncompliance-required{display:grid}.required-note{display:none;font-size:12px;font-weight:800;color:#9a3412;margin-top:6px}.compliance-item.show-required .required-note{display:block}
+.assignment-hero{border:4px solid #ddd6fe;background:#faf5ff;border-radius:28px;padding:26px;margin:18px 0}
+.assignment-hero h2{font-size:34px;margin:0 0 10px;color:#5b21b6}
+.assignment-number{font-size:48px;font-weight:950;color:#5b21b6;margin:8px 0}
+.status-tile{border:1px solid var(--line);border-radius:16px;background:white;padding:14px}
+.status-tile b{font-size:20px}
+.flagged-item{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;margin-bottom:10px;border-left:7px solid var(--orange)}
+.flagged-item.critical{border-left-color:var(--red)}
+.picture-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;border-left:7px solid var(--purple);margin-bottom:12px}.picture-count{font-size:42px;font-weight:950;color:var(--purple);margin:6px 0}
+.defect-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;border-left:7px solid var(--orange);margin-bottom:12px}
+.verifier-comm-hero{border:3px solid #ddd6fe;background:#faf5ff;border-radius:24px;padding:22px;margin:18px 0}
+.verifier-comm-hero h2{font-size:30px;margin:0 0 8px;color:#5b21b6}
+.verifier-chat-card{border:1px solid var(--line);border-radius:20px;background:#fff;padding:18px;border-left:8px solid var(--purple);box-shadow:0 8px 18px rgba(15,23,42,.04)}
+.unread-badge{display:inline-block;background:#fee2e2;color:#991b1b;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:950;margin-left:6px}
+.verifier-contact{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px;margin-bottom:12px}
+.verifier-contact.driver{border-left:7px solid var(--blue)}
+.verifier-contact.chief{border-left:7px solid var(--green)}
+.verifier-contact.manager{border-left:7px solid var(--purple)}
+.verifier-contact .name{font-size:22px;font-weight:950;margin-bottom:4px}
+.contact-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.verifier-alert-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;margin-bottom:12px;border-left:7px solid var(--orange)}
+.verifier-alert-card.urgent{border-left-color:var(--red);background:#fff7f7}
+.verifier-issue-box{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.recent-message{border-bottom:1px solid var(--line);padding:12px 0}
+.recent-message:last-child{border-bottom:0}
+.live-status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:950;margin:4px 0}
+.live-status.review{background:#ede9fe;color:#5b21b6}
+.live-status.pending{background:#fef3c7;color:#92400e}
+.live-status.auto{background:#dcfce7;color:#166534}
+.live-status.flagged{background:#fee2e2;color:#991b1b}
+@media(max-width:950px){.contact-actions{grid-template-columns:1fr}}
+.timeline-item{border-left:5px solid var(--blue);background:#fbfdff;border-radius:14px;padding:14px;margin-bottom:10px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.timeline-item.green{border-left-color:var(--green)}.timeline-item.yellow{border-left-color:var(--orange)}.timeline-item.red{border-left-color:var(--red)}.timeline-item.purple{border-left-color:var(--purple)}
+.map-placeholder{height:170px;border:2px dashed #94a3b8;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:grid;place-items:center;color:#475569;font-weight:850;margin-top:12px;text-align:center}.pdfbox{border:2px dashed #94a3b8;border-radius:14px;padding:14px;background:#f8fafc;margin:8px 0 14px}.mini{font-size:12px;color:var(--muted)}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:2}.nav{display:flex;overflow:auto}.nav button{min-width:135px;text-align:center}.grid4,.grid3,.grid2,.formrow,.ready-grid,.driver-task,.compliance-head,.noncompliance-required,.quick-contact-actions{grid-template-columns:1fr}.header{align-items:flex-start;flex-direction:column}.user{text-align:left}.main{padding:16px}}
+
+
+/* ===== Verifier standalone responsive optimization ===== */
+html{scroll-behavior:smooth}
+body{-webkit-text-size-adjust:100%}
+img,video,canvas{max-width:100%;height:auto}
+*{min-width:0}
+button,.btn{min-height:44px;touch-action:manipulation}
+input,select,textarea{max-width:100%;font-size:16px}
+.card,.ready-banner,.route-banner,.assignment-hero,.status-tile,.flagged-item,.picture-card,.defect-card,.timeline-item,.verifier-comm-hero,.verifier-chat-card,.verifier-contact,.verifier-alert-card,.verifier-issue-box,.quick-contact,.map-placeholder,.pdfbox,.compliance-item{
+  overflow-wrap:anywhere;
+}
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table,.table{min-width:720px}
+
+/* Fluid grids */
+.grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.grid3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.ready-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.contact-actions,.quick-contact-actions{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+
+/* iPad / small laptop */
+@media (max-width:1180px){
+  .main{padding:20px}
+  .layout{grid-template-columns:220px 1fr}
+  .nav button{font-size:15px;padding:12px}
+  .card{padding:16px}
+  .assignment-number,.picture-count,.route-big{font-size:36px!important}
+}
+
+/* iPad portrait + phones */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr!important}
+  .header{align-items:flex-start!important;flex-direction:column!important;padding:18px 16px!important}
+  .logo{font-size:22px!important}
+  .subtitle{font-size:12px!important}
+  .user{text-align:left!important}
+
+  .sidebar{
+    position:sticky!important;
+    top:0!important;
+    z-index:50!important;
+    border-right:0!important;
+    border-bottom:1px solid var(--line)!important;
+    padding:10px!important;
+    background:white!important;
+  }
+  .nav{
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:6px!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .nav button{
+    min-width:150px!important;
+    text-align:center!important;
+    margin-bottom:0!important;
+    padding:12px 10px!important;
+    font-size:14px!important;
+    white-space:nowrap!important;
+  }
+  .rolebox{display:none!important}
+  .main{padding:14px!important}
+
+  .grid,.grid2,.grid3,.grid4,.formrow,.ready-grid,.driver-task,.checkrow,.compliance-head,.noncompliance-required,.contact-actions,.quick-contact-actions{
+    grid-template-columns:1fr!important;
+  }
+
+  .page-title{font-size:26px!important}
+  .page-sub{font-size:14px!important;margin-bottom:14px!important}
+  .section{margin-top:16px!important}
+
+  .card,.ready-banner,.route-banner,.assignment-hero,.status-tile,.flagged-item,.picture-card,.defect-card,.timeline-item,.verifier-comm-hero,.verifier-chat-card,.verifier-contact,.verifier-alert-card,.verifier-issue-box,.quick-contact,.compliance-item{
+    padding:16px!important;
+    border-radius:18px!important;
+  }
+
+  .stat{font-size:28px!important}
+  .stat.small{font-size:22px!important}
+  .assignment-number,.picture-count,.route-big{font-size:30px!important}
+  .ready-banner h2,.assignment-hero h2,.verifier-comm-hero h2{font-size:26px!important}
+  .btn.full,.bigbtn{width:100%!important}
+  table,.table{min-width:760px!important}
+}
+
+/* Phones */
+@media (max-width:600px){
+  .main{padding:10px!important}
+  .header{padding:16px 14px!important}
+  .logo{font-size:20px!important}
+  .page-title{font-size:24px!important}
+  .card h2,.card h3,.ready-banner h2,.assignment-hero h2,.verifier-comm-hero h2{font-size:19px!important}
+  .card,.ready-banner,.route-banner,.assignment-hero,.status-tile,.flagged-item,.picture-card,.defect-card,.timeline-item,.verifier-comm-hero,.verifier-chat-card,.verifier-contact,.verifier-alert-card,.verifier-issue-box,.quick-contact,.compliance-item{
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .tag,.pill,.live-status,.unread-badge{font-size:11px!important}
+  .nav button{min-width:135px!important;font-size:13px!important}
+  table,.table{min-width:780px!important}
+}
+/* ===== End Verifier standalone responsive optimization ===== */
+
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <div class="logo">Verifier Portal</div>
+    <div class="subtitle">Non-commercial pickup workflow • Daily checks • Picture verification • Defect confirmation • Route binder</div>
+  </div>
+  <div class="user">Signed in with Sperry Rail SSO<br><span class="pill">Verifier View</span></div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <nav class="nav">
+    <button class="active" onclick="showTab('today',this)">Today</button>
+    <button onclick="showTab('communications',this)">Communications</button>
+    <button onclick="showTab('daily',this)">Daily Checklist</button>
+    <button onclick="showTab('pictures',this)">Picture Verification</button>
+    <button onclick="showTab('defects',this)">Defects</button>
+    <button onclick="showTab('location',this)">GPS / Location</button>
+    <button onclick="showTab('service',this)">Service Notes</button>
+    <button onclick="showTab('contacts',this)">Contacts</button>
+    <button onclick="showTab('binder',this)">Route Binder</button>
+  </nav>
+  <div class="rolebox">
+    <b>Verifier rules:</b><br>
+    Non-commercial pickup. No DOT drive-time tracking. Complete daily vehicle check, verify assigned pictures, confirm defects reviewed, and keep route contacts accessible.
+  </div>
+</aside>
+
+<main class="main">
+
+
+<section id="today" class="tab active">
+  <h1 class="page-title">Today</h1>
+  <p class="page-sub">Verifier command screen: assigned picture set, verification due status, flagged items, and contacts.</p>
+
+  <div class="assignment-hero">
+    <h2>Today’s Verification Assignment</h2>
+    <div class="assignment-number">1,248 Pictures</div>
+    <p><b>Linked Truck:</b> SRS-248 • <b>Chief:</b> John Carter • <b>Route:</b> PD / Mobile Subdivision</p>
+    <span class="tag purple">Nonstop route</span>
+    <span class="tag red">Due today</span>
+    <span class="tag yellow">Verification pending</span>
+  </div>
+
+  <div class="grid grid4 section">
+    <div class="status-tile">
+      <div class="label">Chief Count</div>
+      <b class="good">Received</b><br>
+      <span class="mini">Submitted last night 8:14 PM</span>
+    </div>
+    <div class="status-tile">
+      <div class="label">Picture Set</div>
+      <b class="warn">Waiting Review</b><br>
+      <span class="mini">1,248 pictures assigned</span>
+    </div>
+    <div class="status-tile">
+      <div class="label">FM Notification</div>
+      <b class="warn">Pending</b><br>
+      <span class="mini">Sent after you confirm</span>
+    </div>
+    <div class="status-tile">
+      <div class="label">Due</div>
+      <b class="bad">Today</b><br>
+      <span class="mini">Before closeout</span>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Required Verifier Actions Today</h2>
+      <div class="driver-task-list">
+        <div class="driver-task"><span>Complete quick pickup/equipment check</span><span class="tag green">Current</span></div>
+        <div class="driver-task"><span>Review SRS-248 picture set</span><span class="tag purple">Pending</span></div>
+        <div class="driver-task"><span>Flag unclear or questionable items</span><span class="tag yellow">If needed</span></div>
+        <div class="driver-task"><span>Confirm all pictures checked</span><span class="tag red">Required</span></div>
+        <div class="driver-task"><span>FM automatically notified after confirmation</span><span class="tag green">Auto</span></div>
+      </div>
+      <button class="btn full bigbtn" onclick="showTab('pictures', document.querySelectorAll('.nav button')[2])">Open Picture Verification</button>
+    </div>
+
+    <div class="card">
+      <h2>Items Needing Attention</h2>
+      <div class="flagged-item critical">
+        <b>MP 44.8 — Possible defect</b><br>
+        <span class="mini">Image glare / questionable rail condition. Needs review.</span><br>
+        <span class="tag red">Priority</span>
+      </div>
+      <div class="flagged-item">
+        <b>MP 52.1 — Blurry image</b><br>
+        <span class="mini">May need rescan or Chief review.</span><br>
+        <span class="tag yellow">Review</span>
+      </div>
+      <button class="btn secondary full" onclick="showTab('defects', document.querySelectorAll('.nav button')[3])">Open Defect Queue</button>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Quick Contacts</h2>
+      <div class="quick-contact driver">
+        <h3>Driver Mechanic</h3>
+        <div class="name">Claudia Stearns</div>
+        <div class="mini">(555) 555-1100 • claudia.stearns@sperryrail.com</div>
+        <div class="quick-contact-actions"><button class="btn">Call</button><button class="btn secondary">Email</button></div>
+      </div>
+      <div class="quick-contact chief">
+        <h3>Linked Chief</h3>
+        <div class="name">John Carter</div>
+        <div class="mini">(555) 555-3100 • john.carter@sperryrail.com</div>
+        <div class="quick-contact-actions"><button class="btn greenbtn">Call</button><button class="btn secondary">Email</button></div>
+      </div>
+      <div class="quick-contact manager">
+        <h3>Field Manager</h3>
+        <div class="name">Mike Reynolds</div>
+        <div class="mini">(555) 555-2100 • mike.reynolds@sperryrail.com</div>
+        <div class="quick-contact-actions"><button class="btn">Call</button><button class="btn secondary">Email</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>What Happens After Confirmation</h2>
+      <div class="driver-task-list">
+        <div class="driver-task"><span>Picture set closes</span><span class="tag green">Auto</span></div>
+        <div class="driver-task"><span>Field Manager notified</span><span class="tag green">Auto</span></div>
+        <div class="driver-task"><span>Chief status updated</span><span class="tag green">Auto</span></div>
+        <div class="driver-task"><span>Flagged defects stay open</span><span class="tag yellow">If any</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Previous Route Notes</h2>
+    <div class="timeline-item yellow"><b>Picture set large</b><br><span class="mini">Chief noted multiple camera glare issues near MP 44.</span></div>
+    <div class="timeline-item green"><b>Route file current</b><br><span class="mini">Mobile Sub PDF updated 05/01/2026.</span></div>
+  </div>
+
+  <div class="section card">
+    <h2>Verifier Communication Snapshot</h2>
+    <div class="grid grid3">
+      <div class="verifier-chat-card">
+        <h3>SRS-248 Chat <span class="unread-badge">2 unread</span></h3>
+        <span class="live-status review">🟣 Picture Set Active</span>
+        <p class="mini">Chief • Driver • FM</p>
+      </div>
+      <div class="verifier-alert-card urgent">
+        <b>Verification Due Today</b><br>
+        <span class="mini">1,248 pictures must be confirmed.</span><br>
+        <span class="tag red">Action required</span>
+      </div>
+      <div class="verifier-contact manager">
+        <b>Field Manager</b><br>
+        <span class="mini">Mike Reynolds • Confirmation pending</span><br>
+        <span class="tag green">Auto-notified after confirmation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="communications" class="tab">
+  <h1 class="page-title">Communications</h1>
+  <p class="page-sub">Verifier-focused communication for picture review, flagged defects, linked Chief, Driver Mechanic, and Field Manager.</p>
+
+  <div class="verifier-comm-hero">
+    <h2>VER-22 Verification Communications</h2>
+    <p><b>Linked Truck:</b> SRS-248 • <b>Route:</b> PD / Mobile Subdivision • <b>Assignment:</b> 1,248 pictures due today</p>
+    <span class="tag purple">Verifier</span>
+    <span class="tag green">Chief</span>
+    <span class="tag blue">Driver Mechanic</span>
+    <span class="tag yellow">Field Manager</span>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="verifier-chat-card">
+      <h2>SRS-248 Operations Chat <span class="unread-badge">2 unread</span></h2>
+      <p class="page-sub">Crew communication tied to this picture set, truck, route, and verification assignment.</p>
+
+      <div class="recent-message">
+        <b>Chief — John Carter</b><br>
+        <span class="mini">Picture count submitted: 1,248. Watch glare around MP 44.</span><br>
+        <span class="tag purple">Last night</span>
+      </div>
+
+      <div class="recent-message">
+        <b>Field Manager — Mike Reynolds</b><br>
+        <span class="mini">Please confirm when all pictures are checked so the route can be closed.</span><br>
+        <span class="tag yellow">1h ago</span>
+      </div>
+
+      <div class="recent-message">
+        <b>Driver — Claudia Stearns</b><br>
+        <span class="mini">Noted glare near MP 44 during testing.</span><br>
+        <span class="tag blue">Yesterday</span>
+      </div>
+
+      <button class="btn full">Open SRS-248 Operations Chat</button>
+    </div>
+
+    <div class="card">
+      <h2>Linked Operational Contacts</h2>
+
+      <div class="verifier-contact chief">
+        <h3>Linked Chief</h3>
+        <div class="name">John Carter</div>
+        <span class="live-status review">🟣 Picture Count Submitted</span>
+        <p class="mini">SRS-248 • 1,248 pictures • Nonstop route</p>
+        <div class="contact-actions">
+          <button class="btn greenbtn">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+
+      <div class="verifier-contact driver">
+        <h3>Driver Mechanic</h3>
+        <div class="name">Claudia Stearns</div>
+        <p class="mini">SRS-248 • PD / Mobile Subdivision</p>
+        <div class="contact-actions">
+          <button class="btn">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+
+      <div class="verifier-contact manager">
+        <h3>Field Manager</h3>
+        <div class="name">Mike Reynolds</div>
+        <p class="mini">(555) 555-2100 • mike.reynolds@sperryrail.com</p>
+        <div class="contact-actions">
+          <button class="btn secondary">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Verification Alerts</h2>
+
+      <div class="verifier-alert-card urgent">
+        <b>🔴 Picture verification due today</b><br>
+        <span class="mini">1,248 pictures from SRS-248 must be checked and confirmed.</span><br>
+        <span class="tag red">Required</span>
+      </div>
+
+      <div class="verifier-alert-card">
+        <b>Glare / possible defect near MP 44</b><br>
+        <span class="mini">Chief and Driver both noted visibility concerns around MP 44.</span><br>
+        <span class="tag yellow">Review carefully</span>
+      </div>
+
+      <div class="verifier-alert-card">
+        <b>FM notification pending</b><br>
+        <span class="mini">Field Manager is automatically notified after you confirm pictures checked.</span><br>
+        <span class="tag green">Auto notify</span>
+      </div>
+    </div>
+
+    <div class="verifier-issue-box">
+      <h2>Quick Flag / Message</h2>
+      <p class="page-sub">Send a verifier issue to the right person without searching contacts.</p>
+
+      <label>Issue Type</label>
+      <select>
+        <option>Picture quality issue</option>
+        <option>Possible defect</option>
+        <option>Missing picture segment</option>
+        <option>Chief picture count mismatch</option>
+        <option>Route / milepost question</option>
+        <option>Equipment issue</option>
+        <option>Other</option>
+      </select>
+
+      <label>Send To</label>
+      <select>
+        <option>Chief + Field Manager</option>
+        <option>Chief only</option>
+        <option>Field Manager only</option>
+        <option>Driver + Chief</option>
+        <option>Entire Route Team</option>
+      </select>
+
+      <label>Priority</label>
+      <select>
+        <option>Normal</option>
+        <option>Important</option>
+        <option>Urgent / Safety Critical</option>
+      </select>
+
+      <label>Message</label>
+      <textarea placeholder="Describe the image issue, milepost, defect concern, or verification question."></textarea>
+
+      <label>Attach Picture / Screenshot</label>
+      <input type="file" accept="image/*,.pdf">
+
+      <button class="btn full">Send Flag / Message</button>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Verification Handoff</h2>
+      <div class="timeline-item yellow">
+        <b>Chief Note</b><br>
+        <span class="mini">Large picture set. Multiple camera glare concerns near MP 44.</span>
+      </div>
+      <div class="timeline-item green">
+        <b>Route File</b><br>
+        <span class="mini">Mobile Sub PDF updated and current.</span>
+      </div>
+      <button class="btn secondary full" onclick="showTab('pictures', document.querySelectorAll('.nav button')[3])">Open Picture Verification</button>
+    </div>
+
+    <div class="card">
+      <h2>Message History</h2>
+      <table class="table">
+        <tr><th>From</th><th>Message</th><th>Time</th><th>Status</th></tr>
+        <tr><td>Chief</td><td>Picture count submitted: 1,248.</td><td>Last night</td><td><span class="tag purple">Received</span></td></tr>
+        <tr><td>Field Manager</td><td>Confirm once reviewed.</td><td>1h ago</td><td><span class="tag yellow">Pending</span></td></tr>
+        <tr><td>Driver</td><td>Glare near MP 44.</td><td>Yesterday</td><td><span class="tag blue">FYI</span></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="daily" class="tab">
+  <h1 class="page-title">Daily Pickup + Equipment Check</h1>
+  <p class="page-sub">Lightweight non-commercial pickup/equipment readiness check. No DOT drive-time workflow.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Start-of-Day Vehicle Check</h2>
+      <div class="compliance-item">
+        <div class="compliance-head"><strong>Vehicle ready: lights / tires / mirrors</strong><select onchange="toggleCompliance(this)"><option>In Compliance</option><option>Not In Compliance</option></select></div>
+        <div class="noncompliance-required"><div><label>Photo Required</label><input type="file" accept="image/*" capture="environment"></div><div><label>Comment Required</label><textarea placeholder="Describe the issue."></textarea></div></div>
+        <div class="required-note">Photo + comment required for anything Not In Compliance.</div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-head"><strong>Fuel / warning lights</strong><select onchange="toggleCompliance(this)"><option>In Compliance</option><option>Not In Compliance</option></select></div>
+        <div class="noncompliance-required"><div><label>Photo Required</label><input type="file" accept="image/*" capture="environment"></div><div><label>Comment Required</label><textarea placeholder="Describe the issue."></textarea></div></div>
+        <div class="required-note">Photo + comment required for anything Not In Compliance.</div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-head"><strong>Tablet / verifier equipment charged and working</strong><select onchange="toggleCompliance(this)"><option>In Compliance</option><option>Not In Compliance</option></select></div>
+        <div class="noncompliance-required"><div><label>Photo Required</label><input type="file" accept="image/*" capture="environment"></div><div><label>Comment Required</label><textarea placeholder="Describe the issue."></textarea></div></div>
+        <div class="required-note">Photo + comment required for anything Not In Compliance.</div>
+      </div>
+      <label>General Notes</label><textarea placeholder="Optional notes..."></textarea>
+      <button class="btn greenbtn full bigbtn">Submit Daily Pickup Check</button>
+    </div>
+
+    <div class="card">
+      <h2>End-of-Day Vehicle Check</h2>
+      <div class="checkrow"><span>Vehicle secured</span><input type="checkbox"></div>
+      <div class="checkrow"><span>Equipment charged / stored</span><input type="checkbox"></div>
+      <div class="checkrow"><span>Picture confirmation submitted</span><input type="checkbox"></div>
+      <div class="checkrow"><span>Route notes updated if needed</span><input type="checkbox"></div>
+      <label>End-of-Day Notes</label><textarea placeholder="Anything next verifier should know?"></textarea>
+      <button class="btn full bigbtn">Submit End-of-Day Check</button>
+    </div>
+  </div>
+</section>
+
+<section id="pictures" class="tab">
+  <h1 class="page-title">Picture Verification</h1>
+  <p class="page-sub">Confirm assigned Nonstop-route pictures were checked. FM is notified when confirmation is submitted.</p>
+
+  <div class="grid grid3">
+    <div class="card"><div class="label">Truck</div><div class="stat small">SRS-248</div><span class="tag purple">Nonstop</span></div>
+    <div class="card"><div class="label">Pictures Reported</div><div class="stat purple">1,248</div><span class="tag yellow">Pending review</span></div>
+    <div class="card"><div class="label">Confirmation Due</div><div class="stat small warn">Today</div><span class="tag red">Required</span></div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Picture Review Checklist</h2>
+      <div class="checkrow"><span>All pictures opened/reviewed</span><input type="checkbox"></div>
+      <div class="checkrow"><span>Picture count matches Chief submission</span><input type="checkbox"></div>
+      <div class="checkrow"><span>Quality issues documented</span><input type="checkbox"></div>
+      <div class="checkrow"><span>Defects or questionable images flagged</span><input type="checkbox"></div>
+      <label>Pictures Checked</label><input placeholder="Example: 1,248">
+      <label>Quality / Verification Notes</label><textarea placeholder="Any blurry images, glare, missing runs, or questionable findings."></textarea>
+      <div class="notice">
+        <b>After you confirm:</b><br>
+        Field Manager is automatically notified, Chief status is updated, and the picture set is closed unless flagged items remain open.
+      </div>
+      <button class="btn full bigbtn">Confirm Pictures Checked + Auto-Notify FM</button>
+    </div>
+
+    <div class="card">
+      <h2>Picture Set Details</h2>
+      <table class="table">
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Chief Submitted</td><td>John Carter</td></tr>
+        <tr><td>Submitted</td><td>Last night 8:14 PM</td></tr>
+        <tr><td>Route</td><td>PD / Mobile Sub</td></tr>
+        <tr><td>MP Range</td><td>22.3 → 71.8</td></tr>
+        <tr><td>Status</td><td><span class="tag yellow">Pending verifier confirmation</span></td></tr>
+      </table>
+      <div class="pdfbox">Picture set preview / file list placeholder</div>
+    </div>
+  </div>
+</section>
+
+<section id="defects" class="tab">
+  <h1 class="page-title">Defects</h1>
+  <p class="page-sub">Review and flag defects found during picture verification.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Flag Defect from Pictures</h2>
+      <label>Truck / Picture Set</label><select><option>SRS-248 — 1,248 pictures</option></select>
+      <label>Defect Type</label><select><option>Track defect</option><option>Image quality issue</option><option>Missing image segment</option><option>Needs Chief/Field Manager review</option><option>Other</option></select>
+      <div class="formrow"><div><label>Milepost</label><input placeholder="44.8"></div><div><label>Severity</label><select><option>Minor</option><option>Moderate</option><option>Critical</option></select></div></div>
+      <label>Comment</label><textarea placeholder="Describe what was found and what needs review."></textarea>
+      <label>Attach Picture / Screenshot</label><input type="file" accept="image/*,.pdf">
+      <button class="btn full">Submit Defect Flag</button>
+    </div>
+
+    <div class="card">
+      <h2>Defect Review Queue</h2>
+      <div class="defect-card">
+        <b>MP 44.8 — Image glare / possible defect</b><br>
+        <span class="mini">Needs Chief review. Submitted by Verifier.</span><br>
+        <span class="tag yellow">Pending</span>
+      </div>
+      <div class="defect-card">
+        <b>MP 52.1 — Confirmed clear</b><br>
+        <span class="mini">Reviewed and cleared.</span><br>
+        <span class="tag green">Complete</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="location" class="tab">
+  <h1 class="page-title">GPS / Location</h1>
+  <p class="page-sub">Automatic pickup location tracking. No DOT drive-time log.</p>
+
+  <div class="grid grid3">
+    <div class="card"><div class="label">Pickup GPS</div><div class="stat small good">Active</div><span class="tag green">Auto GPS</span></div>
+    <div class="card"><div class="label">Current Location</div><div class="stat small">Mobile Yard</div><span class="tag blue">Route area</span></div>
+    <div class="card"><div class="label">DOT Log</div><div class="stat small gray">N/A</div><span class="tag gray">Non-commercial</span></div>
+  </div>
+
+  <div class="section card">
+    <h2>Location Event Log</h2>
+    <table class="table">
+      <tr><th>Event</th><th>Time</th><th>Location</th><th>Entered By</th></tr>
+      <tr><td>Verifier started day</td><td>06:30</td><td>Hotel parking lot</td><td>Auto GPS</td></tr>
+      <tr><td>Arrived route area</td><td>07:12</td><td>Mobile Yard</td><td>Auto GPS</td></tr>
+      <tr><td>Picture review started</td><td>08:05</td><td>Mobile Yard</td><td>Verifier</td></tr>
+    </table>
+    <div class="map-placeholder">Pickup GPS map placeholder</div>
+  </div>
+</section>
+
+<section id="service" class="tab">
+  <h1 class="page-title">Service Notes</h1>
+  <p class="page-sub">Simple service history and notes for the assigned non-commercial pickup.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Add Pickup Service Note</h2>
+      <label>Service Type</label><select><option>Oil change</option><option>Tires</option><option>Brakes</option><option>Inspection</option><option>Equipment issue</option><option>Other</option></select>
+      <div class="formrow"><input placeholder="Location"><input placeholder="Mileage"></div>
+      <label>Notes</label><textarea placeholder="What was done? Anything the next verifier should know?"></textarea>
+      <button class="btn full">Submit Service Note</button>
+    </div>
+
+    <div class="card">
+      <h2>Recent Pickup Service</h2>
+      <div class="timeline-item green"><b>May 21 — Oil Change</b><br><span class="mini">Completed at Fleet Service Center.</span></div>
+      <div class="timeline-item yellow"><b>May 10 — Tire pressure issue</b><br><span class="mini">Rear passenger tire monitored. No leak found.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contacts" class="tab">
+  <h1 class="page-title">Contacts</h1>
+  <p class="page-sub">Key contacts for verifier workflow.</p>
+
+  <div class="grid grid3">
+    <div class="quick-contact driver">
+      <h3>Driver Mechanic</h3>
+      <div class="name">Claudia Stearns</div>
+      <div class="mini">Phone: (555) 555-1100<br>Email: claudia.stearns@sperryrail.com</div>
+      <div class="quick-contact-actions"><button class="btn">Call</button><button class="btn secondary">Email</button></div>
+    </div>
+    <div class="quick-contact chief">
+      <h3>Linked Chief</h3>
+      <div class="name">John Carter</div>
+      <div class="mini">Phone: (555) 555-3100<br>Email: john.carter@sperryrail.com</div>
+      <div class="quick-contact-actions"><button class="btn greenbtn">Call</button><button class="btn secondary">Email</button></div>
+    </div>
+    <div class="quick-contact manager">
+      <h3>Field Manager</h3>
+      <div class="name">Mike Reynolds</div>
+      <div class="mini">Phone: (555) 555-2100<br>Email: mike.reynolds@sperryrail.com</div>
+      <div class="quick-contact-actions"><button class="btn">Call</button><button class="btn secondary">Email</button></div>
+    </div>
+    <div class="quick-contact dispatch">
+      <h3>Railroad Contact</h3>
+      <div class="name">Roadmaster</div>
+      <div class="mini">Phone: (555) 555-1001<br>Email: roadmaster@railroad.com</div>
+      <div class="quick-contact-actions"><button class="btn yellow">Call</button><button class="btn secondary">Email</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="binder" class="tab">
+  <h1 class="page-title">Route Binder</h1>
+  <p class="page-sub">Field reference for the route/subdivision connected to your verification assignment.</p>
+
+  <div class="card">
+    <h2>Mobile Subdivision</h2>
+    <span class="tag blue">MP 0.0 to MP 138.4</span><span class="tag green">Current PDF</span>
+    <h4>Time & Track PDF</h4>
+    <div class="pdfbox"><b>Mobile Sub Time & Track.pdf</b><p class="mini">Effective: 05/01/2026</p><button class="btn">Open PDF</button><button class="btn secondary">Download Offline</button></div>
+    <h4>Yard Location</h4><p>Mobile Yard</p>
+    <h4>Contacts</h4>
+    <table class="table"><tr><th>Name</th><th>Phone</th><th>Email</th><th>Job Title</th><th>Coverage</th></tr><tr><td>John Smith</td><td>(555) 555-1001</td><td>john.smith@railroad.com</td><td>Roadmaster</td><td>MP 0.0 to MP 75.0</td></tr></table>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active')});
+  if(btn){btn.classList.add('active')}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleCompliance(select){
+  const item = select.closest('.compliance-item');
+  if(!item) return;
+  if(select.value === 'Not In Compliance'){ item.classList.add('show-required'); }
+  else { item.classList.remove('show-required'); }
+}
+</script>
+</body>
+</html>

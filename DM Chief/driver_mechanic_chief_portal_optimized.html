@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Driver Mechanic Chief Portal - Optimized</title>
+<style>
+:root{--blue:#123f73;--blue2:#0b2b50;--yellow:#f7c948;--bg:#f4f6f8;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--green:#16a34a;--red:#dc2626;--orange:#f59e0b;--line:#e5e7eb;--purple:#7c3aed;--softblue:#eaf1f9}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;padding:22px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:24px;font-weight:950}.subtitle{font-size:13px;opacity:.88;margin-top:4px}.user{text-align:right;font-size:14px}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.14);margin-top:6px;font-size:12px}
+.layout{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 82px)}
+.sidebar{background:white;border-right:1px solid var(--line);padding:18px}
+.nav button{width:100%;border:0;background:transparent;text-align:left;padding:14px;border-radius:12px;font-size:16px;font-weight:800;color:#334155;margin-bottom:8px;cursor:pointer}
+.nav button.active,.nav button:hover{background:var(--softblue);color:var(--blue)}
+.rolebox{margin-top:22px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.4}
+.main{padding:24px;max-width:1360px}.tab{display:none}.tab.active{display:block}
+.page-title{font-size:28px;font-weight:950;margin:0 0 4px}.page-sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;gap:16px}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.04)}
+.card h2,.card h3{margin-top:0}.stat{font-size:34px;font-weight:950;margin:6px 0}.stat.small{font-size:24px}
+.label{font-size:13px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.good{color:var(--green)}.warn{color:var(--orange)}.bad{color:var(--red)}.purple{color:var(--purple)}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--blue);color:white;font-weight:850;cursor:pointer;margin:4px 4px 4px 0}
+.btn.secondary{background:#e5e7eb;color:#111827}.btn.yellow{background:var(--yellow);color:#111827}.btn.danger{background:var(--red)}.btn.greenbtn{background:var(--green)}.btn.disabled{background:#9ca3af;color:white;cursor:not-allowed}.btn.full{width:100%;margin-top:10px}
+.bigbtn{padding:18px 16px;font-size:17px;border-radius:16px}
+.tag{display:inline-block;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:850;white-space:nowrap;margin:2px}
+.tag.green{background:#dcfce7;color:#166534}.tag.red{background:#fee2e2;color:#991b1b}.tag.yellow{background:#fef3c7;color:#92400e}.tag.blue{background:#dbeafe;color:#1e40af}.tag.gray{background:#f3f4f6;color:#374151}.tag.purple{background:#ede9fe;color:#5b21b6}.tag.black{background:#111827;color:white}
+.table-wrap{width:100%;overflow-x:auto}.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+.table th{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;background:#f8fafc}
+.section{margin-top:22px}.split{display:flex;gap:10px;flex-wrap:wrap}
+.notice{border-left:5px solid var(--yellow);background:#fffbeb;padding:14px;border-radius:12px;margin-bottom:16px}
+.info{border-left:5px solid var(--blue);background:#eff6ff;padding:14px;border-radius:12px;margin-bottom:16px}
+.alert{border-left:5px solid var(--red);background:#fef2f2;padding:14px;border-radius:12px;margin-bottom:16px}
+.formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font-size:15px;background:white}
+textarea{min-height:90px}label{display:block;font-weight:800;margin:10px 0 6px}
+.checkrow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px;margin:8px 0}
+.mini{font-size:12px;color:var(--muted)}
+.pdfbox{border:2px dashed #94a3b8;border-radius:14px;padding:14px;background:#f8fafc;margin:8px 0 14px}
+.mega-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 24px}.mega-actions .btn{width:100%;min-height:76px;border-radius:20px;font-size:18px}
+.timeline-item{border-left:5px solid var(--blue);background:#fbfdff;border-radius:14px;padding:14px;margin-bottom:10px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.timeline-item.green{border-left-color:var(--green)}.timeline-item.yellow{border-left-color:var(--orange)}.timeline-item.red{border-left-color:var(--red)}.timeline-item.purple{border-left-color:var(--purple)}
+.bar{width:100%;height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:6px 0 2px}.bar span{display:block;height:100%;background:var(--blue);border-radius:999px}.bar.green span{background:var(--green)}.bar.yellow span{background:var(--orange)}.bar.purple span{background:var(--purple)}
+.ratio-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fbfdff}.big-percent{font-size:38px;font-weight:950;margin:4px 0}.ratio-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.oos-priority-banner{border:3px solid #fecaca;background:#fef2f2;border-radius:24px;padding:20px;margin:18px 0}
+.oos-priority-banner h2{margin:0 0 10px;color:#991b1b}
+.oos-priority-banner .oos-grid{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.fm-status{display:inline-block;padding:7px 12px;border-radius:999px;background:#dcfce7;color:#166534;font-size:13px;font-weight:900;margin:4px}
+.chief-ready-banner{border:4px solid #fed7aa;background:#fff7ed;border-radius:26px;padding:24px;margin:18px 0}
+.chief-ready-banner h2{font-size:34px;margin:0 0 10px;color:#9a3412}
+.chief-ready-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.chief-ready-item{background:white;border:1px solid #fed7aa;border-radius:14px;padding:12px;font-weight:850}
+.chief-command-route{border:4px solid #ddd6fe;background:#faf5ff;border-radius:26px;padding:24px;margin:18px 0}
+.chief-command-route h2{font-size:34px;margin:0 0 10px;color:#5b21b6}
+.chief-route-big{font-size:40px;font-weight:950;color:#5b21b6;margin:8px 0}
+.chief-action-list{display:grid;gap:10px}
+.chief-action{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px}
+.submission-card{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;margin-bottom:10px}
+.submission-card.critical{border-left:7px solid var(--red)}
+.submission-card.warning{border-left:7px solid var(--orange)}
+.submission-card.good{border-left:7px solid var(--green)}
+.quick-contact{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px}
+.quick-contact.driver{border-left:7px solid var(--blue)}
+.quick-contact.manager{border-left:7px solid var(--green)}
+.quick-contact.verifier{border-left:7px solid var(--purple)}
+.quick-contact .name{font-size:22px;font-weight:950;margin-bottom:4px}
+.quick-contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.route-status-summary{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.chief-comm-hero{border:3px solid #bbf7d0;background:#f0fdf4;border-radius:24px;padding:22px;margin:18px 0}
+.chief-comm-hero h2{font-size:30px;margin:0 0 8px;color:#166534}
+.chief-chat-card{border:1px solid var(--line);border-radius:20px;background:#fff;padding:18px;border-left:8px solid var(--green);box-shadow:0 8px 18px rgba(15,23,42,.04)}
+.unread-badge{display:inline-block;background:#fee2e2;color:#991b1b;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:950;margin-left:6px}
+.chief-contact{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px;margin-bottom:12px}
+.chief-contact.driver{border-left:7px solid var(--blue)}
+.chief-contact.manager{border-left:7px solid var(--green)}
+.chief-contact.verifier{border-left:7px solid var(--purple)}
+.chief-contact.maintenance{border-left:7px solid var(--orange)}
+.chief-contact .name{font-size:22px;font-weight:950;margin-bottom:4px}
+.contact-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.chief-alert-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;margin-bottom:12px;border-left:7px solid var(--orange)}
+.chief-alert-card.urgent{border-left-color:var(--red);background:#fff7f7}
+.escalation-box{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.recent-message{border-bottom:1px solid var(--line);padding:12px 0}
+.recent-message:last-child{border-bottom:0}
+.live-status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:950;margin:4px 0}
+.live-status.testing{background:#ede9fe;color:#5b21b6}
+.live-status.pending{background:#fef3c7;color:#92400e}
+.live-status.auto{background:#dcfce7;color:#166534}
+.live-status.oos{background:#fee2e2;color:#991b1b}
+@media(max-width:950px){.contact-actions{grid-template-columns:1fr}}
+.chief-route-banner{border:3px solid #ddd6fe;background:#faf5ff;border-radius:24px;padding:22px;margin:18px 0}
+.chief-route-banner.stopverify{border-color:#fed7aa;background:#fff7ed}
+.chief-route-banner h2{margin:0 0 8px;font-size:30px}
+.route-action-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;border-left:7px solid var(--purple);margin-bottom:14px}
+.route-action-card.stopverify{border-left-color:var(--orange)}
+.daily-flow{display:grid;gap:10px}
+.daily-flow-item{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px}
+.step-num{width:30px;height:30px;border-radius:999px;background:#dbeafe;color:#1e40af;display:grid;place-items:center;font-weight:950}
+.rail-actions{display:grid;grid-template-columns:1fr;gap:14px}.rail-actions .btn{min-height:86px;font-size:20px;border-radius:22px}
+.current-status{border:3px solid #ddd6fe;background:#faf5ff;border-radius:24px;padding:26px;margin:18px 0;text-align:center}
+.current-status .status-main{font-size:44px;font-weight:950;color:var(--purple);margin:4px 0}
+.current-status .status-detail{font-size:18px;color:#374151;line-height:1.45}
+.status-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:16px 0}
+.status-tile{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;text-align:center}
+.status-tile.active{border:3px solid #ddd6fe;background:#faf5ff}
+.review-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.review-summary .box{border-radius:16px;padding:16px;background:#fff;border:1px solid var(--line)}
+.review-summary .critical{border-left:7px solid var(--red)}
+.review-summary .warning{border-left:7px solid var(--orange)}
+.review-summary .routine{border-left:7px solid var(--green)}
+.closeout-item{display:grid;grid-template-columns:1fr auto;align-items:center;border:1px solid var(--line);background:#fbfdff;border-radius:14px;padding:12px;margin-bottom:10px}
+.review-card{border-left:7px solid var(--orange);background:#fff;border-radius:18px;padding:18px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:14px}
+.review-card.critical{border-left-color:var(--red);background:#fff7f7}.review-card.good{border-left-color:var(--green)}
+.location-chip{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:850;margin:3px}
+.map-placeholder{height:170px;border:2px dashed #94a3b8;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:grid;place-items:center;color:#475569;font-weight:850;margin-top:12px;text-align:center}
+@media(max-width:950px){.chief-ready-grid,.quick-contact-actions,.daily-flow-item{grid-template-columns:1fr}.oos-priority-banner .oos-grid{grid-template-columns:1fr}.status-strip,.review-summary{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:2}.nav{display:flex;overflow:auto}.nav button{min-width:135px;text-align:center}.grid4,.grid3,.grid2,.formrow,.mega-actions,.ratio-split{grid-template-columns:1fr}.header{align-items:flex-start;flex-direction:column}.user{text-align:left}.main{padding:16px}}
+
+
+/* ===== Driver Mechanic Chief standalone responsive optimization ===== */
+html{scroll-behavior:smooth}
+body{-webkit-text-size-adjust:100%}
+img,video,canvas{max-width:100%;height:auto}
+*{min-width:0}
+button,.btn{min-height:44px;touch-action:manipulation}
+input,select,textarea{max-width:100%;font-size:16px}
+.card,.chief-ready-banner,.chief-command-route,.chief-chat-card,.chief-contact,.chief-alert-card,.escalation-box,.route-status-summary,.route-action-card,.review-card,.current-status,.ratio-card,.timeline-item,.oos-priority-banner,.pdfbox{
+  overflow-wrap:anywhere;
+}
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table,.table{min-width:720px}
+
+/* Better fluid grids */
+.grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.grid3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.review-summary{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.status-strip{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.mega-actions{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.ratio-split{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.contact-actions,.quick-contact-actions{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+.chief-ready-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+/* iPad / small laptop */
+@media (max-width:1180px){
+  .main{padding:20px}
+  .layout{grid-template-columns:220px 1fr}
+  .nav button{font-size:15px;padding:12px}
+  .card{padding:16px}
+  .chief-route-big,.current-status .status-main{font-size:34px!important}
+}
+
+/* iPad portrait + phones */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr!important}
+  .header{align-items:flex-start!important;flex-direction:column!important;padding:18px 16px!important}
+  .logo{font-size:22px!important}
+  .subtitle{font-size:12px!important}
+  .user{text-align:left!important}
+
+  .sidebar{
+    position:sticky!important;
+    top:0!important;
+    z-index:50!important;
+    border-right:0!important;
+    border-bottom:1px solid var(--line)!important;
+    padding:10px!important;
+    background:white!important;
+  }
+  .nav{
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:6px!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .nav button{
+    min-width:150px!important;
+    text-align:center!important;
+    margin-bottom:0!important;
+    padding:12px 10px!important;
+    font-size:14px!important;
+    white-space:nowrap!important;
+  }
+  .rolebox{display:none!important}
+  .main{padding:14px!important}
+
+  .grid,.grid2,.grid3,.grid4,.formrow,.daily-flow-item,.workflow-step,.chief-action,.review-summary,.status-strip,.mega-actions,.ratio-split,.contact-actions,.quick-contact-actions,.chief-ready-grid,.oos-priority-banner .oos-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  .page-title{font-size:26px!important}
+  .page-sub{font-size:14px!important;margin-bottom:14px!important}
+  .section{margin-top:16px!important}
+
+  .card,.chief-ready-banner,.chief-command-route,.chief-chat-card,.chief-contact,.chief-alert-card,.escalation-box,.route-status-summary,.route-action-card,.review-card,.current-status,.oos-priority-banner{
+    padding:16px!important;
+    border-radius:18px!important;
+  }
+
+  .stat{font-size:28px!important}
+  .stat.small{font-size:22px!important}
+  .chief-route-big,.current-status .status-main{font-size:30px!important}
+  .chief-ready-banner h2,.chief-command-route h2,.chief-comm-hero h2{font-size:26px!important}
+  .btn.full,.bigbtn{width:100%!important}
+  table,.table{min-width:760px!important}
+}
+
+/* Phones */
+@media (max-width:600px){
+  .main{padding:10px!important}
+  .header{padding:16px 14px!important}
+  .logo{font-size:20px!important}
+  .page-title{font-size:24px!important}
+  .card h2,.card h3,.chief-ready-banner h2,.chief-command-route h2,.chief-comm-hero h2,.current-status .status-main{font-size:19px!important}
+  .card,.chief-ready-banner,.chief-command-route,.chief-chat-card,.chief-contact,.chief-alert-card,.escalation-box,.route-status-summary,.route-action-card,.review-card,.current-status,.oos-priority-banner{
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .tag,.pill,.live-status,.unread-badge,.fm-status{font-size:11px!important}
+  .nav button{min-width:135px!important;font-size:13px!important}
+  table,.table{min-width:780px!important}
+}
+/* ===== End Driver Mechanic Chief standalone responsive optimization ===== */
+
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <div class="logo">Driver Mechanic Chief Portal</div>
+    <div class="subtitle">Chief review • track/down time control • OOS decisions • crew notes • Field Manager notifications</div>
+  </div>
+  <div class="user">Signed in with Sperry Rail SSO<br><span class="pill">Driver Mechanic Chief View</span></div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <nav class="nav">
+    <button class="active" onclick="showTab('today',this)">Today</button>
+    <button onclick="showTab('communications',this)">Communications</button>
+    <button onclick="showTab('routeverify',this)">Route Verification</button>
+    <button onclick="showTab('reviews',this)">Review Queue</button>
+    <button onclick="showTab('railtime',this)">Track / Down Time</button>
+    <button onclick="showTab('oos',this)">OOS / Defects</button>
+    <button onclick="showTab('truck',this)">Truck Status</button>
+    <button onclick="showTab('crewnotes',this)">Crew Notes</button>
+    <button onclick="showTab('closeout',this)">Daily Closeout</button>
+    <button onclick="showTab('binder',this)">Route Binder</button>
+  </nav>
+  <div class="rolebox">
+    <b>Chief rules:</b><br>
+    Driver submits checklists. Chief reviews submissions, controls testing/down time, handles OOS decisions, and escalates to Field Manager/Maintenance when needed.
+  </div>
+</aside>
+
+<main class="main">
+
+
+
+<section id="today" class="tab active">
+  <h1 class="page-title">Today</h1>
+  <p class="page-sub">Chief command screen: what needs your attention right now.</p>
+
+  <div class="chief-ready-banner">
+    <h2>🟡 CHIEF ACTION REQUIRED</h2>
+    <p><b>Picture count and driver review still need to be completed before daily closeout.</b></p>
+    <div class="chief-ready-grid">
+      <div class="chief-ready-item">🟡 Pre-trip review pending</div>
+      <div class="chief-ready-item">🔴 1 defect decision needed</div>
+      <div class="chief-ready-item">🟣 Picture count due tonight</div>
+      <div class="chief-ready-item">✅ Track time active</div>
+    </div>
+  </div>
+
+  <div class="chief-command-route">
+    <div class="label">Current Route Assignment</div>
+    <div class="chief-route-big">🟣 NONSTOP ROUTE</div>
+    <p><b>Truck:</b> SRS-248 • <b>Route:</b> PD / Mobile Subdivision • <b>Linked Verifier:</b> VER-22 / Sarah Miller</p>
+    <p class="page-sub"><b>Chief responsibility today:</b> review driver submissions, control track/down time, submit nightly picture count, and resolve any OOS/defect decisions. FM is auto-notified when picture count is submitted.</p>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Required Chief Actions Today</h2>
+      <div class="chief-action-list">
+        <div class="chief-action"><span>Review driver pre-trip submission</span><span class="tag yellow">Pending</span></div>
+        <div class="chief-action"><span>Resolve out-of-compliance defect</span><span class="tag red">Decision needed</span></div>
+        <div class="chief-action"><span>Control / verify track and down time</span><span class="tag purple">Active</span></div>
+        <div class="chief-action"><span>Submit nightly picture count</span><span class="tag purple">Due tonight</span></div>
+        <div class="chief-action"><span>Complete Chief daily closeout</span><span class="tag gray">End of day</span></div>
+      </div>
+      <button class="btn yellow full" onclick="showTab('routeverify', document.querySelectorAll('.nav button')[1])">Open Route Verification</button>
+    </div>
+
+    <div class="card">
+      <h2>Driver Submissions Waiting</h2>
+      <div class="submission-card warning">
+        <b>Pre-trip submitted</b><br>
+        <span class="mini">Submitted at 05:58 AM • Chief review required.</span><br>
+        <span class="tag yellow">Review pending</span>
+      </div>
+      <div class="submission-card critical">
+        <b>Out-of-compliance issue</b><br>
+        <span class="mini">Air brakes / lights / tires • System classified potential OOS.</span><br>
+        <span class="tag red">Decision needed</span>
+      </div>
+      <div class="submission-card warning">
+        <b>Post-trip pending</b><br>
+        <span class="mini">Driver cannot end shift until post-trip is submitted.</span><br>
+        <span class="tag gray">Waiting on driver</span>
+      </div>
+      <button class="btn full" onclick="showTab('reviews', document.querySelectorAll('.nav button')[2])">Open Review Queue</button>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="route-status-summary">
+      <h2>Route Verification Status</h2>
+      <table class="table">
+        <tr><th>Item</th><th>Status</th></tr>
+        <tr><td>Picture count</td><td><span class="tag red">Not submitted</span></td></tr>
+        <tr><td>FM notification</td><td><span class="tag gray">Waiting on Chief submission</span></td></tr>
+        <tr><td>Verifier</td><td><span class="tag yellow">Will notify tonight</span></td></tr>
+        <tr><td>Verifier confirmation</td><td><span class="tag gray">Due tomorrow</span></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Quick Contacts</h2>
+      <div class="grid grid3">
+        <div class="quick-contact driver">
+          <h3>Driver</h3>
+          <div class="name">Claudia Stearns</div>
+          <div class="mini">(555) 555-1100<br>claudia.stearns@sperryrail.com</div>
+          <div class="quick-contact-actions"><button class="btn">Call</button><button class="btn secondary">Email</button></div>
+        </div>
+        <div class="quick-contact manager">
+          <h3>Field Manager</h3>
+          <div class="name">Mike Reynolds</div>
+          <div class="mini">(555) 555-2100<br>mike.reynolds@sperryrail.com</div>
+          <div class="quick-contact-actions"><button class="btn greenbtn">Call</button><button class="btn secondary">Email</button></div>
+        </div>
+        <div class="quick-contact verifier">
+          <h3>Verifier</h3>
+          <div class="name">Sarah Miller</div>
+          <div class="mini">(555) 555-4100<br>sarah.miller@sperryrail.com</div>
+          <span class="tag purple">Nonstop only</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Current Rail Status</h2>
+      <div class="current-status" style="margin:0;">
+        <div class="label">Current Status</div>
+        <div class="status-main">🟣 TESTING</div>
+        <div class="status-detail">
+          Mobile Subdivision • Track 1<br>
+          MP 22.3 → MP 71.8<br>
+          Active for: <b>2h 18m</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Track Time vs Down Time</h2>
+      <div class="grid grid2">
+        <div class="ratio-card">
+          <div class="label">Track Time</div>
+          <div class="big-percent purple">84%</div>
+          <div class="bar purple"><span style="width:84%"></span></div>
+          <span class="mini">6.7 hrs testing</span>
+        </div>
+        <div class="ratio-card">
+          <div class="label">Down Time</div>
+          <div class="big-percent warn">16%</div>
+          <div class="bar yellow"><span style="width:16%"></span></div>
+          <span class="mini">1.3 hrs down</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Chief Communication Snapshot</h2>
+    <div class="grid grid3">
+      <div class="chief-chat-card">
+        <h3>SRS-248 Chat <span class="unread-badge">3 unread</span></h3>
+        <span class="live-status testing">🟣 Active Route Chat</span>
+        <p class="mini">Driver • FM • Verifier</p>
+      </div>
+      <div class="chief-alert-card urgent">
+        <b>OOS Decision Needed</b><br>
+        <span class="mini">Driver submitted an out-of-compliance item.</span><br>
+        <span class="tag red">Action required</span>
+      </div>
+      <div class="chief-contact manager">
+        <b>Field Manager</b><br>
+        <span class="mini">Mike Reynolds • Picture count due tonight</span><br>
+        <span class="tag green">Available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<section id="communications" class="tab">
+  <h1 class="page-title">Communications</h1>
+  <p class="page-sub">Chief-focused communication for the assigned driver, Field Manager, verifier, route operations chat, safety issues, and escalation reporting.</p>
+
+  <div class="chief-comm-hero">
+    <h2>SRS-248 Chief Communications</h2>
+    <p><b>Route:</b> PD / Mobile Subdivision • <b>Route Type:</b> Nonstop • <b>Chief Role:</b> Driver review, route verification, track/down time, OOS decisions, and daily closeout.</p>
+    <span class="tag blue">Driver</span>
+    <span class="tag green">Field Manager</span>
+    <span class="tag purple">Verifier</span>
+    <span class="tag yellow">Maintenance</span>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="chief-chat-card">
+      <h2>Active Route Operations Chat <span class="unread-badge">3 unread</span></h2>
+      <p class="page-sub">Crew communication tied to this truck, route, and verification workflow.</p>
+
+      <div class="recent-message">
+        <b>Driver — Claudia Stearns</b><br>
+        <span class="mini">Pre-trip submitted. One out-of-compliance item needs review.</span><br>
+        <span class="tag red">Action needed</span>
+      </div>
+
+      <div class="recent-message">
+        <b>Field Manager — Mike Reynolds</b><br>
+        <span class="mini">Reminder: picture count is due tonight before closeout.</span><br>
+        <span class="tag yellow">18 min ago</span>
+      </div>
+
+      <div class="recent-message">
+        <b>Verifier — Sarah Miller</b><br>
+        <span class="mini">I’ll confirm the picture set tomorrow once it is submitted.</span><br>
+        <span class="tag purple">Yesterday</span>
+      </div>
+
+      <button class="btn greenbtn full">Open SRS-248 Operations Chat</button>
+    </div>
+
+    <div class="card">
+      <h2>Chief Operational Contacts</h2>
+
+      <div class="chief-contact driver">
+        <h3>Driver Mechanic</h3>
+        <div class="name">Claudia Stearns</div>
+        <span class="live-status testing">🟣 TESTING / ASSIGNED</span>
+        <p class="mini">SRS-248 • Pre-trip submitted • Post-trip pending</p>
+        <div class="contact-actions">
+          <button class="btn">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+
+      <div class="chief-contact manager">
+        <h3>Field Manager</h3>
+        <div class="name">Mike Reynolds</div>
+        <p class="mini">(555) 555-2100 • mike.reynolds@sperryrail.com</p>
+        <div class="contact-actions">
+          <button class="btn greenbtn">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+
+      <div class="chief-contact verifier">
+        <h3>Linked Verifier</h3>
+        <div class="name">Sarah Miller</div>
+        <span class="live-status pending">NONSTOP ROUTE ONLY</span>
+        <p class="mini">VER-22 • Verifier confirmation due tomorrow after picture count submission</p>
+        <div class="contact-actions">
+          <button class="btn secondary">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Chief Alerts</h2>
+
+      <div class="chief-alert-card urgent">
+        <b>🔴 OOS / Defect decision needed</b><br>
+        <span class="mini">Driver submitted an out-of-compliance item. System marked it potential OOS.</span><br>
+        <span class="tag red">Decision required</span>
+      </div>
+
+      <div class="chief-alert-card">
+        <b>Picture count due tonight</b><br>
+        <span class="mini">Submit daily picture count to notify FM and linked Verifier.</span><br>
+        <span class="tag purple">Nonstop route</span>
+      </div>
+
+      <div class="chief-alert-card">
+        <b>Post-trip pending</b><br>
+        <span class="mini">Driver cannot end shift until post-trip is submitted.</span><br>
+        <span class="tag yellow">Waiting on driver</span>
+      </div>
+    </div>
+
+    <div class="escalation-box">
+      <h2>Quick Escalation / Message</h2>
+      <p class="page-sub">Send a Chief issue to the right person without searching contacts.</p>
+
+      <label>Issue Type</label>
+      <select>
+        <option>OOS / safety defect</option>
+        <option>Driver checklist issue</option>
+        <option>Track / downtime issue</option>
+        <option>Picture count issue</option>
+        <option>Verifier issue</option>
+        <option>Maintenance issue</option>
+        <option>Route / railroad issue</option>
+        <option>Other</option>
+      </select>
+
+      <label>Send To</label>
+      <select>
+        <option>Field Manager</option>
+        <option>Driver Mechanic</option>
+        <option>Field Manager + Driver</option>
+        <option>Field Manager + Maintenance</option>
+        <option>Verifier</option>
+        <option>Entire Route Team</option>
+      </select>
+
+      <label>Priority</label>
+      <select>
+        <option>Normal</option>
+        <option>Important</option>
+        <option>Urgent / Safety Critical</option>
+      </select>
+
+      <label>Message</label>
+      <textarea placeholder="Describe the issue, location, and next action needed."></textarea>
+
+      <label>Attach Photo / Document</label>
+      <input type="file" accept="image/*,.pdf" capture="environment">
+
+      <button class="btn greenbtn full">Send Escalation</button>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Route Verification Messaging</h2>
+      <div class="chief-alert-card">
+        <b>Nonstop Route</b><br>
+        <span class="mini">Message sends to FM automatically when picture count is submitted. Verifier receives notification tonight.</span><br>
+        <span class="tag purple">Picture count pending</span>
+      </div>
+
+      <div class="chief-alert-card">
+        <b>Stop & Verify Route</b><br>
+        <span class="mini">If assigned Stop & Verify, submitting Chief Verified Defects automatically notifies FM.</span><br>
+        <span class="tag yellow">Alternate workflow</span>
+      </div>
+
+      <button class="btn full" onclick="showTab('routeverify', document.querySelectorAll('.nav button')[2])">Open Route Verification</button>
+    </div>
+
+    <div class="card">
+      <h2>Crew Handoff Messages</h2>
+      <div class="timeline-item yellow">
+        <b>Driver Note</b><br>
+        <span class="mini">Truck pulls slightly right. Tire shop scheduled. Monitor front tire.</span>
+      </div>
+      <div class="timeline-item red">
+        <b>Chief Note</b><br>
+        <span class="mini">Review tire before next road move. Possible OOS decision pending.</span>
+      </div>
+      <button class="btn secondary full" onclick="showTab('crewnotes', document.querySelectorAll('.nav button')[7])">Open Crew Notes</button>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Message History</h2>
+    <table class="table">
+      <tr><th>From</th><th>Message</th><th>Time</th><th>Status</th></tr>
+      <tr><td>Driver</td><td>Pre-trip submitted with one issue.</td><td>05:58 AM</td><td><span class="tag red">Needs review</span></td></tr>
+      <tr><td>Field Manager</td><td>Picture count due tonight.</td><td>18 min ago</td><td><span class="tag yellow">Pending</span></td></tr>
+      <tr><td>Verifier</td><td>Will confirm picture set tomorrow.</td><td>Yesterday</td><td><span class="tag purple">Verifier linked</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="routeverify" class="tab">
+  <h1 class="page-title">Route Verification</h1>
+  <div class="notice"><b>If assigned Stop & Verify instead:</b> this screen would prioritize Chief Verified Defects instead of picture count, and no Verifier card would be shown.</div>
+  <p class="page-sub">Chief daily verification duties change based on whether the commercial truck is assigned to a Nonstop route or Stop & Verify route.</p>
+
+  <div class="grid grid2">
+    <div class="route-action-card">
+      <h2>Nonstop Route — Daily Picture Count</h2>
+      <span class="tag purple">Current assignment</span>
+      <p>For a Nonstop route, the Chief submits the total pictures taken that day. The Field Manager is automatically notified. The linked Verifier is notified that night and confirms the pictures the next day.</p>
+
+      <div class="daily-flow">
+        <div class="daily-flow-item"><div class="step-num">1</div><div><b>Chief enters picture count</b><br><span class="mini">How many pictures were taken today.</span></div><span class="tag yellow">Required nightly</span></div>
+        <div class="daily-flow-item"><div class="step-num">2</div><div><b>Field Manager notified</b><br><span class="mini">Automatic notification when Chief submits.</span></div><span class="tag green">Auto</span></div>
+        <div class="daily-flow-item"><div class="step-num">3</div><div><b>Verifier notified</b><br><span class="mini">Linked Verifier receives notification tonight.</span></div><span class="tag purple">VER-22</span></div>
+        <div class="daily-flow-item"><div class="step-num">4</div><div><b>Verifier confirms next day</b><br><span class="mini">FM receives automatic confirmation when completed.</span></div><span class="tag green">Tomorrow</span></div>
+      </div>
+
+      <label>Truck</label>
+      <select><option>SRS-248 — Nonstop — Linked VER-22</option></select>
+      <label>Total Pictures Taken Today</label>
+      <input placeholder="Example: 1,248">
+      <label>Notes</label>
+      <textarea placeholder="Camera/upload/picture quality notes."></textarea>
+      <button class="btn full">Submit Picture Count + Auto-Notify FM + Notify Verifier</button>
+    </div>
+
+    <div class="route-action-card stopverify">
+      <h2>Stop & Verify — Chief Verified Defects</h2>
+      <span class="tag yellow">Used when assigned</span>
+      <p>For a Stop & Verify route, the Chief submits how many defects they personally verified/found that day. The Field Manager is automatically notified daily.</p>
+
+      <div class="daily-flow">
+        <div class="daily-flow-item"><div class="step-num">1</div><div><b>Chief verifies defects</b><br><span class="mini">Chief confirms defects in the field.</span></div><span class="tag yellow">Chief action</span></div>
+        <div class="daily-flow-item"><div class="step-num">2</div><div><b>Chief submits verified defect count</b><br><span class="mini">Critical and non-critical totals.</span></div><span class="tag red">Required daily</span></div>
+        <div class="daily-flow-item"><div class="step-num">3</div><div><b>Field Manager notified</b><br><span class="mini">Automatic notification with daily verified defect total.</span></div><span class="tag green">Auto</span></div>
+      </div>
+
+      <label>Truck</label>
+      <select><option>SRS-250 — Stop & Verify</option></select>
+      <label>Chief Verified Defects Found</label>
+      <input placeholder="Example: 7">
+      <div class="formrow">
+        <div><label>Critical</label><input placeholder="0"></div>
+        <div><label>Non-Critical</label><input placeholder="7"></div>
+      </div>
+      <label>Notes</label>
+      <textarea placeholder="Locations, defect categories, and follow-up needed."></textarea>
+      <button class="btn full">Submit Chief Verified Defects + Auto-Notify FM</button>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Today’s Route Verification Status</h2>
+    <table class="table">
+      <tr><th>Truck</th><th>Route Type</th><th>Chief Requirement</th><th>FM Notification</th><th>Verifier</th><th>Status</th></tr>
+      <tr><td>SRS-248</td><td><span class="tag purple">Nonstop</span></td><td>Submit picture count</td><td><span class="tag yellow">Pending Chief submission</span></td><td>VER-22</td><td><span class="tag yellow">Due tonight</span></td></tr>
+      <tr><td>SRS-250</td><td><span class="tag yellow">Stop & Verify</span></td><td>Submit Chief Verified Defects</td><td><span class="tag green">FM notified</span></td><td><span class="tag gray">None</span></td><td><span class="tag green">Submitted</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="reviews" class="tab">
+  <h1 class="page-title">Review Queue</h1>
+  <p class="page-sub">Sorted by severity so critical items are handled first.</p>
+
+  <div class="review-summary">
+    <div class="box critical"><div class="label">Critical</div><div class="stat bad">1</div><span class="tag red">Decision needed</span></div>
+    <div class="box warning"><div class="label">Needs Review</div><div class="stat warn">2</div><span class="tag yellow">Pending</span></div>
+    <div class="box routine"><div class="label">Routine</div><div class="stat good">4</div><span class="tag green">Completed</span></div>
+  </div>
+
+  <div class="review-card critical">
+    <h2>🔴 Critical — System-Classified Defect</h2>
+    <p><b>Item:</b> Air brakes / lights / tires</p>
+    <p><b>System classification:</b> Critical / DOT Safety Sensitive</p>
+    <p><b>Vehicle status:</b> Potential OOS — do not operate until reviewed</p>
+    <p><b>Driver comment:</b> Rear left tire has visible sidewall damage.</p>
+    <div class="pdfbox">Driver photo preview placeholder</div>
+    <label>Chief Decision</label>
+    <select>
+      <option>Mark truck Out of Service</option>
+      <option>Safe with caution after review</option>
+      <option>Maintenance required before operation</option>
+      <option>Escalate to Field Manager</option>
+    </select>
+    <label>Chief Notes</label>
+    <textarea placeholder="Document decision, who was notified, and next action."></textarea>
+    <button class="btn danger">Submit OOS Decision</button>
+    <button class="btn yellow">Notify Maintenance</button>
+    <button class="btn secondary">Notify Field Manager</button>
+    <button class="btn secondary">Notify Driver</button>
+    <span class="fm-status">FM Notified: Yes</span>
+  </div>
+
+  <div class="review-card">
+    <h2>🟡 Needs Review — Pre-Trip Checklist</h2>
+    <table class="table">
+      <tr><th>Submitted By</th><th>Submitted</th><th>Status</th><th>Defects</th></tr>
+      <tr><td>driver@sperryrail.com</td><td>05:58 AM</td><td><span class="tag yellow">Pending Chief Review</span></td><td>0 critical / 1 monitor</td></tr>
+    </table>
+    <button class="btn greenbtn">Accept Pre-Trip</button>
+    <button class="btn yellow">Send Back for Correction</button>
+    <button class="btn secondary">Open Details</button>
+    <button class="btn secondary">Notify Driver</button>
+  </div>
+
+  <div class="review-card">
+    <h2>🟡 Needs Review — 50-Hour PM</h2>
+    <table class="table">
+      <tr><th>Checklist</th><th>Status</th><th>Action</th></tr>
+      <tr><td>50-hour PM</td><td><span class="tag yellow">Due today</span></td><td>Reminder active</td></tr>
+      <tr><td>Post-trip</td><td><span class="tag gray">Not submitted</span></td><td>Waiting on driver</td></tr>
+      <tr><td>Monthly checklist</td><td><span class="tag green">Current</span></td><td>No action</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<section id="railtime" class="tab">
+  <h1 class="page-title">Track Time + Down Time</h1>
+  <p class="page-sub">Chief controls testing/down time for commercial Driver Mechanic trucks. Driver sees these as view-only.</p>
+
+  <div class="grid grid4">
+    <div class="card"><div class="label">Current Status</div><div class="stat purple small">Testing</div></div>
+    <div class="card"><div class="label">Track Time</div><div class="stat purple">6.7h</div></div>
+    <div class="card"><div class="label">Down Time</div><div class="stat warn">1.3h</div></div>
+    <div class="card"><div class="label">Miles Tested</div><div class="stat good">49.5</div></div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Start / Stop Rail Status</h2>
+      <div class="rail-actions">
+        <button class="btn greenbtn full">Start Testing / Track Time</button>
+        <button class="btn yellow full">Start Down Time</button>
+        <button class="btn secondary full">Stop Current Status</button>
+      </div>
+      <div class="notice section"><b>Rule:</b> Testing/down time does not count as Driver Mechanic DOT public-road drive time.</div>
+    </div>
+
+    <div class="card">
+      <h2>Rail Event Details</h2>
+      <label>Subdivision</label>
+      <select><option>Mobile Subdivision</option><option>PD Subdivision</option><option>NO&M</option></select>
+      <div class="formrow">
+        <div><label>Start MP</label><input placeholder="22.3"></div>
+        <div><label>End MP</label><input placeholder="71.8"></div>
+      </div>
+      <label>Track / Yard</label>
+      <input placeholder="Track 1 / Main / Yard Track">
+      <label>Down Time Reason</label>
+      <select><option>Pilot delay</option><option>Truck maintenance</option><option>Mechanical issue</option><option>Technical issue</option><option>Railroad delay</option><option>Weather</option><option>Other</option></select>
+      <label>Notes</label>
+      <textarea placeholder="Explain testing or down time details."></textarea>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Rail Time Log</h2>
+    <table class="table">
+      <tr><th>Status</th><th>Time</th><th>Subdivision</th><th>MP / Track</th><th>Reason</th></tr>
+      <tr><td><span class="tag purple">Testing</span></td><td>08:12–11:46</td><td>Mobile Sub</td><td>MP 22.3 → 71.8 • Track 1</td><td>Testing</td></tr>
+      <tr><td><span class="tag yellow">Down Time</span></td><td>11:46–12:17</td><td>PD Sub</td><td>MP 44.8</td><td>Pilot delay</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="oos" class="tab">
+  <h1 class="page-title">OOS / Defects</h1>
+  <p class="page-sub">System-classified defects require Chief action and may escalate to Field Manager/Maintenance.</p>
+
+  <div class="alert">
+    <b>Critical defect pending:</b> Air brakes / lights / tires marked Not In Compliance by Driver Mechanic.
+  </div>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Defect Details</h2>
+      <table class="table">
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Checklist</td><td>Pre-trip</td></tr>
+        <tr><td>Item</td><td>Air brakes / lights / tires</td></tr>
+        <tr><td>System Severity</td><td><span class="tag red">Critical / DOT Safety Sensitive</span></td></tr>
+        <tr><td>System Status</td><td><span class="tag red">Potential OOS</span></td></tr>
+        <tr><td>Field Manager</td><td><span class="tag green">Notified</span></td></tr>
+        <tr><td>Driver Mechanic</td><td><span class="tag yellow">Awaiting Chief Decision</span></td></tr>
+        <tr><td>Photo</td><td><button class="btn secondary">View Photo</button></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Chief Resolution</h2>
+      <label>Decision</label>
+      <select>
+        <option>Truck Out of Service</option>
+        <option>Safe with caution after inspection</option>
+        <option>Maintenance completed - return to service</option>
+        <option>Escalate to Field Manager</option>
+      </select>
+      <label>Resolution Notes</label>
+      <textarea placeholder="Document inspection, decision, and who was notified."></textarea>
+      <button class="btn danger full">Submit OOS / Resolution Decision</button>
+      <button class="btn yellow full">Notify Maintenance</button>
+      <button class="btn secondary full">Notify Field Manager</button>
+      <button class="btn secondary full">Notify Driver</button>
+      <div class="notice" style="margin-top:12px;"><b>FM Status:</b> Field Manager has already been notified of this critical defect.</div>
+    </div>
+  </div>
+</section>
+
+<section id="truck" class="tab">
+  <h1 class="page-title">Truck Status</h1>
+  <p class="page-sub">Truck GPS, service status, defects, and active assignment.</p>
+
+  <div class="grid grid4">
+    <div class="card"><div class="label">Truck GPS</div><div class="stat small good">Active</div><span class="tag green">Auto GPS</span></div>
+    <div class="card"><div class="label">Truck Health</div><div class="stat warn">84%</div></div>
+    <div class="card"><div class="label">Service Due</div><div class="stat warn">2</div></div>
+    <div class="card"><div class="label">OOS Status</div><div class="stat small red">Review</div></div>
+  </div>
+
+  <div class="section card">
+    <h2>Location / GPS Event Log</h2>
+    <table class="table">
+      <tr><th>Event</th><th>Time</th><th>Location</th><th>Entered By</th></tr>
+      <tr><td>Public road driving start</td><td>06:14</td><td>Holiday Inn - Mobile, AL</td><td>Auto GPS / Driver</td></tr>
+      <tr><td>Public road driving stop</td><td>07:03</td><td>Mobile Yard</td><td>Auto GPS / Driver</td></tr>
+      <tr><td>Testing started</td><td>08:12</td><td>Mobile Sub • MP 22.3</td><td>Chief</td></tr>
+    </table>
+    <div class="map-placeholder">Truck GPS + Chief rail status map placeholder</div>
+  </div>
+</section>
+
+
+<section id="crewnotes" class="tab">
+  <h1 class="page-title">Crew Notes</h1>
+  <p class="page-sub">Unified notes from Driver Mechanics and Chiefs. Notes are visible to the next assigned crew.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Current Crew Notes</h2>
+      <div class="timeline-item yellow">
+        <span class="tag blue">Driver</span>
+        <b> Truck pulls slightly right</b><br>
+        <span class="mini">Driver note today • Tire shop scheduled. Monitor front tire.</span>
+      </div>
+      <div class="timeline-item red">
+        <span class="tag green">Chief</span>
+        <b> Review tire before next road move</b><br>
+        <span class="mini">Chief note today • Possible OOS decision pending.</span>
+      </div>
+      <div class="timeline-item green">
+        <span class="tag blue">Driver</span>
+        <b> Encoder belt replaced</b><br>
+        <span class="mini">Previous crew • Running normal.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Create Chief Note</h2>
+      <label>Priority</label>
+      <select><option>Normal</option><option>Important</option><option>Critical / must read</option></select>
+      <label>Note Category</label>
+      <select><option>Truck issue</option><option>Route / yard note</option><option>Service reminder</option><option>OOS / safety issue</option><option>General note</option></select>
+      <label>Note</label>
+      <textarea placeholder="Add Chief note for the next crew."></textarea>
+      <button class="btn full">Save Chief Note</button>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section id="closeout" class="tab">
+  <h1 class="page-title">Chief Daily Closeout</h1>
+  <p class="page-sub">Final Chief review before the day is closed out.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Closeout Checklist</h2>
+      <div class="closeout-item"><span>Pre-trip accepted or sent back</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>Post-trip accepted or sent back</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>50-hour PM reviewed if due</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>Track/down time complete</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>Picture count / Chief Verified Defects submitted</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>OOS defects resolved or escalated</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>Crew notes complete</span><input type="checkbox"></div>
+      <div class="closeout-item"><span>Field Manager notified if needed</span><input type="checkbox"></div>
+      <button class="btn greenbtn full bigbtn">Submit Chief Daily Closeout</button>
+    </div>
+
+    <div class="card">
+      <h2>Closeout Summary</h2>
+      <table class="table">
+        <tr><th>Area</th><th>Status</th></tr>
+        <tr><td>Driver Checklists</td><td><span class="tag yellow">1 pending</span></td></tr>
+        <tr><td>Rail Time</td><td><span class="tag green">Complete</span></td></tr>
+        <tr><td>Route Verification</td><td><span class="tag yellow">Picture count pending — FM not yet notified</span></td></tr>
+        <tr><td>OOS / Defects</td><td><span class="tag red">Decision needed</span></td></tr>
+        <tr><td>Crew Notes</td><td><span class="tag green">Complete</span></td></tr>
+      </table>
+      <label>Chief End-of-Day Notes</label>
+      <textarea placeholder="Document anything the Field Manager or next crew needs to know."></textarea>
+    </div>
+  </div>
+</section>
+
+<section id="binder" class="tab">
+  <h1 class="page-title">Route Binder</h1>
+  <p class="page-sub">Quick operational reference only.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Assigned Subdivision</h2>
+      <table class="table">
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Subdivision</td><td>Mobile Subdivision</td></tr>
+        <tr><td>Coverage</td><td>MP 0.0 to MP 138.4</td></tr>
+        <tr><td>Yard</td><td>Mobile Yard</td></tr>
+      </table>
+      <div class="pdfbox"><b>Mobile Sub Time & Track.pdf</b><p class="mini">Effective: 05/01/2026</p><button class="btn">Open PDF</button><button class="btn secondary">Download Offline</button></div>
+    </div>
+
+    <div class="card">
+      <h2>Contacts</h2>
+      <table class="table">
+        <tr><th>Name</th><th>Role</th><th>Phone</th><th>Coverage</th></tr>
+        <tr><td>John Smith</td><td>Roadmaster</td><td>(555) 555-1001</td><td>MP 0.0–75.0</td></tr>
+        <tr><td>Dispatch</td><td>Dispatcher</td><td>(555) 555-2222</td><td>Subdivision</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+</main>
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active')});
+  if(btn){btn.classList.add('active')}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

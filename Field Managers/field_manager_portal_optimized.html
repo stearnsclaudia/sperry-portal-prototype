@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sperry Field Manager Portal - Optimized</title>
+<style>
+:root{
+  --blue:#123f73;--blue2:#0b2b50;--yellow:#f7c948;--bg:#f4f6f8;--card:#ffffff;
+  --text:#1f2937;--muted:#6b7280;--green:#16a34a;--red:#dc2626;--orange:#f59e0b;
+  --line:#e5e7eb;--purple:#7c3aed;--softblue:#eaf1f9;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;padding:22px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:24px;font-weight:950}.subtitle{font-size:13px;opacity:.88;margin-top:4px}.user{text-align:right;font-size:14px}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.14);margin-top:6px;font-size:12px}
+.layout{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 82px)}
+.sidebar{background:white;border-right:1px solid var(--line);padding:18px}
+.nav button{width:100%;border:0;background:transparent;text-align:left;padding:14px;border-radius:12px;font-size:16px;font-weight:800;color:#334155;margin-bottom:8px;cursor:pointer}
+.nav button.active,.nav button:hover{background:var(--softblue);color:var(--blue)}
+.rolebox{margin-top:22px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.4}
+.main{padding:24px;max-width:1360px}.tab{display:none}.tab.active{display:block}
+.page-title{font-size:28px;font-weight:950;margin:0 0 4px}.page-sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;gap:16px}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.04)}
+.card h2,.card h3{margin-top:0}.stat{font-size:34px;font-weight:950;margin:6px 0}.stat.small{font-size:24px}
+.label{font-size:13px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.good{color:var(--green)}.warn{color:var(--orange)}.bad{color:var(--red)}.purple{color:var(--purple)}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--blue);color:white;font-weight:850;cursor:pointer;margin:4px 4px 4px 0}
+.btn.secondary{background:#e5e7eb;color:#111827}.btn.yellow{background:var(--yellow);color:#111827}.btn.danger{background:var(--red)}.btn.greenbtn{background:var(--green)}.btn.full{width:100%;margin-top:10px}
+.tag{display:inline-block;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:850;white-space:nowrap;margin:2px}
+.tag.green{background:#dcfce7;color:#166534}.tag.red{background:#fee2e2;color:#991b1b}.tag.yellow{background:#fef3c7;color:#92400e}.tag.blue{background:#dbeafe;color:#1e40af}.tag.gray{background:#f3f4f6;color:#374151}.tag.purple{background:#ede9fe;color:#5b21b6}
+.table-wrap{width:100%;overflow-x:auto}.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+.table th{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;background:#f8fafc}
+.section{margin-top:22px}.notice{border-left:5px solid var(--yellow);background:#fffbeb;padding:14px;border-radius:12px;margin-bottom:16px}
+.info{border-left:5px solid var(--blue);background:#eff6ff;padding:14px;border-radius:12px;margin-bottom:16px}
+.formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font-size:15px;background:white}
+textarea{min-height:90px}label{display:block;font-weight:800;margin:10px 0 6px}
+.route-type-card{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px;margin-bottom:14px}
+.route-type-card.nonstop{border-left:7px solid var(--purple)}.route-type-card.stopverify{border-left:7px solid var(--orange)}
+.verifier-link{display:inline-block;padding:8px 12px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-weight:900;font-size:13px;margin:4px 0}
+.workflow-box{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;margin-top:12px}
+.workflow-step{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:10px;border-bottom:1px solid var(--line)}
+.workflow-step:last-child{border-bottom:0}.step-num{width:30px;height:30px;border-radius:999px;background:#dbeafe;color:#1e40af;display:grid;place-items:center;font-weight:950}
+.bar{width:100%;height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:6px 0 2px}.bar span{display:block;height:100%;background:var(--blue);border-radius:999px}.bar.green span{background:var(--green)}.bar.yellow span{background:var(--orange)}.bar.purple span{background:var(--purple)}
+.scorecard{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfdff;margin-bottom:10px}
+.pdfbox{border:2px dashed #94a3b8;border-radius:14px;padding:14px;background:#f8fafc;margin:8px 0 14px}
+.notification-feed{display:grid;gap:12px}
+.notification-item{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;border-left:7px solid var(--blue)}
+.notification-item.picture{border-left-color:var(--purple)}
+.notification-item.confirmed{border-left-color:var(--green)}
+.notification-item.pending{border-left-color:var(--orange)}
+.notification-time{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.auto-notify-card{border:2px solid #ddd6fe;background:#faf5ff;border-radius:18px;padding:16px;margin-top:12px}
+.urgent-panel{border:3px solid #fecaca;background:#fef2f2;border-radius:22px;padding:18px;margin:18px 0}
+.urgent-panel h2{margin:0 0 12px;color:#991b1b}
+.escalation-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;border-left:7px solid var(--red);margin-bottom:12px}
+.escalation-card.warning{border-left-color:var(--orange)}
+.escalation-card.good{border-left-color:var(--green)}
+.priority-feed{display:grid;gap:12px}
+.priority-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;background:white;padding:12px}
+.overdue-rule{border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px;margin-bottom:10px}
+.comm-hero{border:3px solid #bfdbfe;background:#eff6ff;border-radius:24px;padding:22px;margin:18px 0}
+.comm-hero h2{font-size:30px;margin:0 0 8px;color:#1e40af}
+.employee-card{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px;margin-bottom:12px}
+.employee-card.driver{border-left:7px solid var(--blue)}
+.employee-card.chief{border-left:7px solid var(--green)}
+.employee-card.verifier{border-left:7px solid var(--purple)}
+.employee-card.coverage{border-left:7px solid var(--orange)}
+.employee-card .name{font-size:21px;font-weight:950;margin-bottom:4px}
+.employee-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.thread-card{border:1px solid var(--line);border-radius:18px;background:white;padding:16px;margin-bottom:12px}
+.thread-card.urgent{border-left:7px solid var(--red);background:#fff7f7}
+.group-chip{display:inline-block;padding:7px 11px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:900;margin:4px}
+.message-box{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.directory-filter{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.ops-chat-card{border:1px solid var(--line);border-radius:20px;background:#fff;padding:18px;border-left:8px solid var(--purple);box-shadow:0 8px 18px rgba(15,23,42,.04)}
+.ops-chat-card.warning{border-left-color:var(--orange)}
+.ops-chat-card.good{border-left-color:var(--green)}
+.unread-badge{display:inline-block;background:#fee2e2;color:#991b1b;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:950;margin-left:6px}
+.live-status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:950;margin:4px 0}
+.live-status.testing{background:#ede9fe;color:#5b21b6}
+.live-status.hotel{background:#fef3c7;color:#92400e}
+.live-status.travel{background:#dbeafe;color:#1e40af}
+.live-status.coverage{background:#ffedd5;color:#9a3412}
+.live-status.oos{background:#fee2e2;color:#991b1b}
+.live-status.off{background:#f3f4f6;color:#374151}
+.last-contact{font-size:12px;color:var(--muted);font-weight:800;margin-top:5px}
+.quick-group-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.quick-group{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;cursor:pointer}
+.quick-group b{display:block;margin-bottom:5px}
+.safety-broadcast{border:3px solid #fecaca;background:#fef2f2;border-radius:22px;padding:18px}
+.safety-broadcast h2{color:#991b1b;margin:0 0 10px}
+.activity-item{display:grid;grid-template-columns:1fr auto;gap:12px;border-bottom:1px solid var(--line);padding:12px 0}
+.activity-item:last-child{border-bottom:0}
+@media(max-width:950px){.quick-group-grid{grid-template-columns:1fr}}
+@media(max-width:950px){.directory-filter,.employee-actions{grid-template-columns:1fr}}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:2}.nav{display:flex;overflow:auto}.nav button{min-width:135px;text-align:center}.grid4,.grid3,.grid2,.formrow,.workflow-step{grid-template-columns:1fr}.header{align-items:flex-start;flex-direction:column}.user{text-align:left}.main{padding:16px}}
+
+
+/* ===== Field Manager standalone responsive optimization ===== */
+html{scroll-behavior:smooth}
+body{-webkit-text-size-adjust:100%}
+img,video,canvas{max-width:100%;height:auto}
+*{min-width:0}
+button,.btn{min-height:44px;touch-action:manipulation}
+input,select,textarea{max-width:100%;font-size:16px}
+.card,.route-type-card,.employee-card,.ops-chat-card,.quick-group,.priority-item,.notification-item,.comm-hero,.urgent-panel,.safety-broadcast,.message-box,.auto-notify-card,.workflow-box,.overdue-rule,.scorecard{
+  overflow-wrap:anywhere;
+}
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table,.table{min-width:720px}
+
+/* Better desktop/tablet wrapping */
+.grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.grid3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.directory-filter{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.quick-group-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.employee-actions{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+
+/* iPad / small laptop */
+@media (max-width:1180px){
+  .main{padding:20px}
+  .layout{grid-template-columns:220px 1fr}
+  .nav button{font-size:15px;padding:12px}
+  .card{padding:16px}
+}
+
+/* iPad portrait + phones */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr!important}
+  .header{align-items:flex-start!important;flex-direction:column!important;padding:18px 16px!important}
+  .logo{font-size:22px!important}
+  .subtitle{font-size:12px!important}
+  .user{text-align:left!important}
+
+  .sidebar{
+    position:sticky!important;
+    top:0!important;
+    z-index:50!important;
+    border-right:0!important;
+    border-bottom:1px solid var(--line)!important;
+    padding:10px!important;
+    background:white!important;
+  }
+  .nav{
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:6px!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .nav button{
+    min-width:150px!important;
+    text-align:center!important;
+    margin-bottom:0!important;
+    padding:12px 10px!important;
+    font-size:14px!important;
+    white-space:nowrap!important;
+  }
+  .rolebox{display:none!important}
+  .main{padding:14px!important}
+
+  .grid,.grid2,.grid3,.grid4,.formrow,.workflow-step,.priority-item,.activity-item,.quick-group-grid,.directory-filter,.employee-actions{
+    grid-template-columns:1fr!important;
+  }
+
+  .page-title{font-size:26px!important}
+  .page-sub{font-size:14px!important;margin-bottom:14px!important}
+  .section{margin-top:16px!important}
+  .card,.route-type-card,.employee-card,.ops-chat-card,.comm-hero,.urgent-panel,.safety-broadcast,.message-box,.auto-notify-card,.workflow-box{
+    padding:16px!important;
+    border-radius:18px!important;
+  }
+  .stat{font-size:28px!important}
+  .stat.small{font-size:22px!important}
+  .btn.full{width:100%!important}
+
+  table,.table{min-width:760px!important}
+}
+
+/* Phones */
+@media (max-width:600px){
+  .main{padding:10px!important}
+  .header{padding:16px 14px!important}
+  .logo{font-size:20px!important}
+  .page-title{font-size:24px!important}
+  .card h2,.card h3,.comm-hero h2,.urgent-panel h2,.safety-broadcast h2{font-size:19px!important}
+  .card,.route-type-card,.employee-card,.ops-chat-card,.comm-hero,.urgent-panel,.safety-broadcast,.message-box{
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .tag,.pill,.live-status,.unread-badge,.verifier-link{font-size:11px!important}
+  .nav button{min-width:135px!important;font-size:13px!important}
+  table,.table{min-width:780px!important}
+}
+/* ===== End Field Manager standalone responsive optimization ===== */
+
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <div class="logo">Sperry Field Manager Portal</div>
+    <div class="subtitle">My Fleet • Route Verification • Track Time • Routes/Binder • Templates • Reports • Admin</div>
+  </div>
+  <div class="user">Signed in with Sperry Rail SSO<br><span class="pill">Field Manager View</span></div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <nav class="nav">
+    <button class="active" data-tab="today">Today</button>
+    <button data-tab="communications">Operations Communications</button>
+    <button data-tab="fleet">My Fleet</button>
+    <button data-tab="routeverify">Route Verification</button>
+    <button data-tab="tracktime">Track Time</button>
+    <button data-tab="routes">Routes / Binder</button>
+    <button data-tab="templates">Checklist Templates</button>
+    <button data-tab="reports">Reports</button>
+    <button data-tab="admin">Admin</button>
+  </nav>
+  <div class="rolebox">
+    <b>Manager view:</b><br>
+    Monitor compliance, manage vehicles, assign route type, track Nonstop vs Stop & Verify verification, and manage employee access.
+  </div>
+</aside>
+
+<main class="main">
+
+
+<section id="today" class="tab active">
+  <h1 class="page-title">Today</h1>
+  <p class="page-sub">Field Manager priority view: what needs attention first, what is overdue, and what has been automatically reported.</p>
+
+  <div class="urgent-panel">
+    <h2>🔴 Needs Field Manager Attention</h2>
+    <div class="priority-feed">
+      <div class="priority-item">
+        <div>
+          <b>SRS-248 — Chief picture count not submitted</b><br>
+          <span class="mini">Nonstop route • Due by 9:00 PM tonight • Linked verifier VER-22 waiting.</span>
+        </div>
+        <span class="tag yellow">Due tonight</span>
+      </div>
+
+      <div class="priority-item">
+        <div>
+          <b>SRS-311 — Verifier confirmation overdue</b><br>
+          <span class="mini">Nonstop route • Verifier confirmation was due today.</span>
+        </div>
+        <span class="tag red">Overdue</span>
+      </div>
+
+      <div class="priority-item">
+        <div>
+          <b>SRS-250 — Stop & Verify verified defects received</b><br>
+          <span class="mini">Chief submitted 7 verified defects found today.</span>
+        </div>
+        <span class="tag green">Received</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid4">
+    <div class="card"><div class="label">Daily Compliance</div><div class="stat good">92%</div><span class="tag green">11 complete</span><span class="tag red">1 missing</span></div>
+    <div class="card"><div class="label">Missing Submissions</div><div class="stat warn">2</div><span class="tag yellow">Chief / verifier</span></div>
+    <div class="card"><div class="label">Nonstop FM Notices</div><div class="stat warn">2</div><span class="tag yellow">1 pending</span></div>
+    <div class="card"><div class="label">Chief Verified Defects</div><div class="stat good">7</div><span class="tag green">Submitted today</span></div>
+  </div>
+
+  <div class="section card">
+    <h2>Automatic Field Manager Notifications</h2>
+    <p class="page-sub">Nonstop routes notify you when the Chief submits the picture count, then again when the Verifier confirms pictures were checked. Stop & Verify routes notify you when the Chief submits verified defect totals.</p>
+
+    <div class="notification-feed">
+      <div class="notification-item picture">
+        <div class="notification-time">Tonight • Nonstop Route</div>
+        <b>SRS-248 — Chief picture count expected</b><br>
+        <span class="mini">Chief submits number of pictures taken today. FM notification sends automatically.</span><br>
+        <span class="tag yellow">Waiting on Chief</span>
+      </div>
+
+      <div class="notification-item pending">
+        <div class="notification-time">Today • Stop & Verify</div>
+        <b>SRS-250 — Chief Verified Defects received</b><br>
+        <span class="mini">Chief submitted 7 verified defects found today.</span><br>
+        <span class="tag green">FM notified automatically</span>
+      </div>
+
+      <div class="notification-item confirmed">
+        <div class="notification-time">Tomorrow • Nonstop Route</div>
+        <b>SRS-248 — Verifier confirmation expected</b><br>
+        <span class="mini">Once VER-22 confirms all pictures were checked, FM receives automatic confirmation.</span><br>
+        <span class="tag green">Auto-notify FM when confirmed</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Route Verification Status</h2>
+      <div class="route-type-card nonstop">
+        <b>SRS-248 — Nonstop Route</b><br>
+        <span class="mini">Chief picture count due tonight. Linked verifier confirms tomorrow.</span><br>
+        <span class="tag yellow">Picture count pending</span>
+        <span class="verifier-link">Linked VER-22</span>
+      </div>
+      <div class="route-type-card stopverify">
+        <b>SRS-250 — Stop & Verify Route</b><br>
+        <span class="mini">Chief submits verified defects found themselves.</span><br>
+        <span class="tag green">Chief Verified Defects submitted</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Live Fleet Status</h2>
+      <table class="table">
+        <tr><th>Asset</th><th>Route</th><th>Route Type</th><th>Status</th></tr>
+        <tr><td>SRS-248</td><td>Gulf Coast</td><td><span class="tag purple">Nonstop</span></td><td><span class="tag purple">Testing</span></td></tr>
+        <tr><td>SRS-250</td><td>PD</td><td><span class="tag yellow">Stop & Verify</span></td><td><span class="tag green">Complete</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  
+  <div class="section card">
+    <h2>Active Route Chat Snapshot</h2>
+    <div class="grid grid3">
+      <div class="ops-chat-card">
+        <h3>SRS-248 Operations <span class="unread-badge">2 unread</span></h3>
+        <span class="live-status testing">🟣 TESTING</span>
+        <p class="mini">Driver • Chief • Verifier • FM</p>
+      </div>
+      <div class="ops-chat-card warning">
+        <h3>Vacation Coverage <span class="unread-badge">NEW</span></h3>
+        <span class="live-status coverage">🟠 COVERAGE ACTIVE</span>
+        <p class="mini">2 temporary employees currently assigned.</p>
+      </div>
+      <div class="ops-chat-card good">
+        <h3>Verifier Follow-Up</h3>
+        <span class="live-status off">⚫ DUE TOMORROW</span>
+        <p class="mini">VER-22 confirmation pending.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<section id="communications" class="tab">
+  <h1 class="page-title">Operations Communications</h1>
+  <p class="page-sub">Route-based messaging, employee contact, coverage communication, safety broadcasts, and company-wide directory access.</p>
+
+  <div class="comm-hero">
+    <h2>Operations Communications Command Center</h2>
+    <p><b>Purpose:</b> Keep Field Managers connected to current route teams, coverage employees, Chiefs, Drivers, Verifiers, and company-wide operational groups without hunting through separate texts, calls, or email chains.</p>
+    <span class="tag blue">Route Chats</span>
+    <span class="tag yellow">Coverage</span>
+    <span class="tag purple">Directory</span>
+    <span class="tag green">Broadcasts</span>
+  </div>
+
+  <div class="section card">
+    <h2>📌 Active Route Operations Chats</h2>
+    <div class="grid grid3">
+      <div class="ops-chat-card">
+        <h3>SRS-248 Operations <span class="unread-badge">2 unread</span></h3>
+        <span class="live-status testing">🟣 TESTING</span>
+        <p class="mini">Driver • Chief • Verifier • Field Manager<br>PD / Mobile Subdivision • Nonstop Route</p>
+        <button class="btn full">Open Chat</button>
+      </div>
+
+      <div class="ops-chat-card warning">
+        <h3>SRS-250 Operations</h3>
+        <span class="live-status hotel">🟡 HOTEL / STAGED</span>
+        <p class="mini">Driver • Chief • Field Manager<br>PD Route • Stop & Verify</p>
+        <button class="btn full">Open Chat</button>
+      </div>
+
+      <div class="ops-chat-card good">
+        <h3>Vacation Coverage <span class="unread-badge">NEW</span></h3>
+        <span class="live-status coverage">🟠 COVERAGE ACTIVE</span>
+        <p class="mini">Temporary coverage employees currently assigned to this route.</p>
+        <button class="btn full">Open Coverage Chat</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid2 section">
+    <div class="card">
+      <h2>My Route Team <span class="unread-badge">3 unread</span></h2>
+      <p class="page-sub">Current employees assigned to your active route vehicles.</p>
+
+      <div class="employee-card driver">
+        <div class="name">Claudia Stearns</div>
+        <span class="tag blue">Driver Mechanic</span>
+        <span class="live-status testing">🟣 TESTING</span>
+        <p class="mini">SRS-248 • PD / Mobile Subdivision • Nonstop Route</p>
+        <div class="last-contact">Last contact: 42 min ago</div>
+        <div class="employee-actions">
+          <button class="btn">Message</button>
+          <button class="btn secondary">Call</button>
+        </div>
+      </div>
+
+      <div class="employee-card chief">
+        <div class="name">John Carter</div>
+        <span class="tag green">Driver Mechanic Chief</span>
+        <span class="live-status testing">🟣 TESTING</span>
+        <p class="mini">SRS-248 • Picture count due tonight • Track time active</p>
+        <div class="last-contact">Last contact: 18 min ago</div>
+        <div class="employee-actions">
+          <button class="btn greenbtn">Message</button>
+          <button class="btn secondary">Call</button>
+        </div>
+      </div>
+
+      <div class="employee-card verifier">
+        <div class="name">Sarah Miller</div>
+        <span class="tag purple">Verifier</span>
+        <span class="live-status off">⚫ OFF SHIFT</span>
+        <p class="mini">VER-22 • Linked to SRS-248 • Picture confirmation due tomorrow</p>
+        <div class="last-contact">No contact today</div>
+        <div class="employee-actions">
+          <button class="btn secondary">Message</button>
+          <button class="btn secondary">Call</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Vacation Coverage <span class="unread-badge">NEW</span></h2>
+      <p class="page-sub">Temporary coverage employees currently assigned to your route.</p>
+
+      <div class="employee-card coverage">
+        <div class="name">Tyler Johnson</div>
+        <span class="tag yellow">Coverage Chief</span>
+        <span class="live-status coverage">🟠 VACATION COVERAGE</span>
+        <p class="mini">Covering SRS-250 • May 29–June 2 • Stop & Verify Route</p>
+        <div class="last-contact">Last contact: 2h ago</div>
+        <div class="employee-actions">
+          <button class="btn yellow">Message</button>
+          <button class="btn secondary">Call</button>
+        </div>
+      </div>
+
+      <div class="employee-card coverage">
+        <div class="name">Morgan Lee</div>
+        <span class="tag yellow">Coverage Verifier</span>
+        <span class="live-status travel">🔵 TRAVEL</span>
+        <p class="mini">Covering VER-31 • May 30–June 4</p>
+        <div class="last-contact">No contact today</div>
+        <div class="employee-actions">
+          <button class="btn yellow">Message</button>
+          <button class="btn secondary">Call</button>
+        </div>
+      </div>
+
+      <button class="btn full">Message All Vacation Coverage</button>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Smart Quick Groups</h2>
+    <p class="page-sub">Auto-generated communication groups based on current assignments and operational status.</p>
+    <div class="quick-group-grid">
+      <div class="quick-group"><b>My Route Team</b><span class="tag blue">8 members</span></div>
+      <div class="quick-group"><b>All Chiefs</b><span class="tag green">6 members</span></div>
+      <div class="quick-group"><b>All Drivers</b><span class="tag blue">5 members</span></div>
+      <div class="quick-group"><b>All Verifiers</b><span class="tag purple">3 members</span></div>
+      <div class="quick-group"><b>Vacation Coverage</b><span class="tag yellow">2 active</span></div>
+      <div class="quick-group"><b>Active Route Teams</b><span class="tag green">4 routes</span></div>
+      <div class="quick-group"><b>OOS Events</b><span class="tag red">1 active</span></div>
+      <div class="quick-group"><b>All Field Managers</b><span class="tag gray">Company</span></div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="safety-broadcast">
+      <h2>⚠ Emergency / Safety Broadcast</h2>
+      <p>Send high-priority alerts to selected route teams, role groups, or the entire company.</p>
+      <label>Broadcast Type</label>
+      <select>
+        <option>Weather Alert</option>
+        <option>Track Access Change</option>
+        <option>Railroad Restriction</option>
+        <option>Equipment Recall</option>
+        <option>Safety Stand Down</option>
+        <option>Urgent Operational Notice</option>
+      </select>
+      <label>Send To</label>
+      <select>
+        <option>My Route Team</option>
+        <option>All Current Route Teams</option>
+        <option>All Chiefs</option>
+        <option>All Drivers</option>
+        <option>All Verifiers</option>
+        <option>Entire Company</option>
+      </select>
+      <label>Message</label>
+      <textarea placeholder="Type urgent broadcast message..."></textarea>
+      <button class="btn danger full">Send Safety Broadcast</button>
+    </div>
+
+    <div class="card">
+      <h2>Compose Message</h2>
+      <div class="message-box">
+        <label>Send To</label>
+        <select>
+          <option>Individual Employee</option>
+          <option>SRS-248 Operations Chat</option>
+          <option>My Route Team</option>
+          <option>Vacation Coverage</option>
+          <option>All Current Route Chiefs</option>
+          <option>All Current Route Drivers</option>
+          <option>All Current Route Verifiers</option>
+          <option>All Field Managers</option>
+          <option>Entire Company</option>
+        </select>
+
+        <label>Priority</label>
+        <select>
+          <option>Normal</option>
+          <option>Important</option>
+          <option>Urgent / Safety Critical</option>
+        </select>
+
+        <label>Subject</label>
+        <input placeholder="Example: Route update / Picture count reminder / Weather alert">
+
+        <label>Message</label>
+        <textarea placeholder="Type message here..."></textarea>
+
+        <button class="btn full">Send Message</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Recent Operational Activity</h2>
+      <div class="activity-item">
+        <div><b>John Carter</b><br><span class="mini">Picture count reminder sent.</span></div>
+        <span class="tag yellow">18 min ago</span>
+      </div>
+      <div class="activity-item">
+        <div><b>Sarah Miller</b><br><span class="mini">Verifier confirmation pending for tomorrow.</span></div>
+        <span class="tag purple">1h ago</span>
+      </div>
+      <div class="activity-item">
+        <div><b>Tyler Johnson</b><br><span class="mini">Vacation coverage started.</span></div>
+        <span class="tag yellow">2h ago</span>
+      </div>
+      <div class="activity-item">
+        <div><b>SRS-250 Operations</b><br><span class="mini">Stop & Verify defect count submitted.</span></div>
+        <span class="tag green">Today</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Company Directory Search</h2>
+      <p class="page-sub">Find employees by name, role, route, region, or current status.</p>
+
+      <div class="directory-filter">
+        <input placeholder="Search name or email">
+        <select>
+          <option>All Roles</option>
+          <option>Driver Mechanics</option>
+          <option>Chiefs</option>
+          <option>Verifiers</option>
+          <option>YTV Chiefs</option>
+          <option>Walking Stick Chiefs</option>
+          <option>Field Managers</option>
+          <option>Maintenance</option>
+        </select>
+        <select>
+          <option>All Regions</option>
+          <option>Gulf Coast</option>
+          <option>NO&M</option>
+          <option>PD</option>
+          <option>Mobile Subdivision</option>
+        </select>
+        <select>
+          <option>All Statuses</option>
+          <option>Testing</option>
+          <option>Hotel / Staged</option>
+          <option>Travel</option>
+          <option>Vacation Coverage</option>
+          <option>OOS Event</option>
+          <option>Off Shift</option>
+        </select>
+      </div>
+
+      <table class="table">
+        <tr><th>Employee</th><th>Role</th><th>Current Assignment</th><th>Status</th><th>Action</th></tr>
+        <tr><td>Claudia Stearns</td><td>Driver Mechanic</td><td>SRS-248 • Mobile Sub</td><td><span class="live-status testing">Testing</span></td><td><button class="btn secondary">Message</button></td></tr>
+        <tr><td>John Carter</td><td>Chief</td><td>SRS-248 • Mobile Sub</td><td><span class="live-status testing">Testing</span></td><td><button class="btn secondary">Message</button></td></tr>
+        <tr><td>Sarah Miller</td><td>Verifier</td><td>VER-22 • SRS-248</td><td><span class="live-status off">Off Shift</span></td><td><button class="btn secondary">Message</button></td></tr>
+        <tr><td>Tyler Johnson</td><td>Coverage Chief</td><td>SRS-250 • Vacation Coverage</td><td><span class="live-status coverage">Covering</span></td><td><button class="btn secondary">Message</button></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<section id="fleet" class="tab">
+  <h1 class="page-title">My Fleet</h1>
+  <p class="page-sub">Vehicles assigned to your route area, including route type, assignments, service history, and vehicle records.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>SRS-248 Profile</h2>
+      <table class="table">
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Vehicle</td><td>2026 Freightliner M2 106 Plus</td></tr>
+        <tr><td>Vehicle Type</td><td><span class="tag blue">Commercial Freightliner Verifier</span></td></tr>
+        <tr><td>Route</td><td>Gulf Coast Route</td></tr>
+        <tr><td>Route Type</td><td><span class="tag purple">Nonstop Route</span> <span class="verifier-link">Linked VER-22</span></td></tr>
+        <tr><td>Driver Mechanic</td><td>driver@sperryrail.com</td></tr>
+        <tr><td>Chief</td><td>chief@sperryrail.com</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>Add / Edit Vehicle</h2>
+      <label>Vehicle Number</label><input placeholder="SRS-248">
+      <label>Vehicle Type</label>
+      <select><option>Commercial Freightliner Verifier</option><option>Commercial Ford Verifier</option><option>Commercial Peterbilt Verifier</option><option>Short Route Pickup</option><option>YTV Bundle</option><option>Walking Stick</option></select>
+      <label>Route Assignment</label>
+      <select><option>Gulf Coast Route</option><option>NO&M Route</option><option>PD Route</option></select>
+      <label>Commercial Route Type</label>
+      <select><option>Nonstop Route</option><option>Stop and Verify Route</option></select>
+      <label>Linked Verifier Portal / Vehicle</label>
+      <select><option>VER-22 — Required for Nonstop Route</option><option>None — Stop and Verify Route</option></select>
+      <button class="btn full">Save Vehicle</button>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Current Route Vehicles</h2>
+    <table class="table">
+      <tr><th>Vehicle</th><th>Type</th><th>Route</th><th>Route Type</th><th>Verifier Link</th><th>FM Notifications</th><th>Status</th></tr>
+      <tr><td>SRS-248</td><td>Commercial Freightliner</td><td>Gulf Coast</td><td><span class="tag purple">Nonstop</span></td><td><span class="verifier-link">VER-22</span></td><td><span class="tag green">Active</span></td></tr>
+      <tr><td>SRS-250</td><td>Commercial Peterbilt</td><td>PD Route</td><td><span class="tag yellow">Stop & Verify</span></td><td><span class="tag gray">None</span></td><td><span class="tag green">Active</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="routeverify" class="tab">
+  <h1 class="page-title">Route Verification</h1>
+  <p class="page-sub">Commercial trucks are assigned as either Nonstop Route or Stop & Verify Route.</p>
+
+  <div class="grid grid2">
+    <div class="route-type-card nonstop">
+      <h2>Nonstop Route</h2>
+      <span class="tag purple">Verifier-linked workflow</span>
+      <p>Chief verifies how many pictures were taken each day. The Field Manager is automatically notified when the Chief submits the picture count. That night, the linked Verifier is notified. The next day, the Field Manager is automatically notified again once the Verifier confirms they checked all pictures.</p>
+      
+      <div class="auto-notify-card">
+        <h3>FM Auto-Notification Flow</h3>
+        <div class="workflow-step"><div class="step-num">A</div><div><b>Chief submits picture count</b><br><span class="mini">Field Manager is notified automatically the same night.</span></div><span class="tag purple">FM notified</span></div>
+        <div class="workflow-step"><div class="step-num">B</div><div><b>Verifier confirms next day</b><br><span class="mini">Field Manager is notified automatically once the Verifier confirms all pictures were checked.</span></div><span class="tag green">FM confirmed</span></div>
+      </div>
+<div class="workflow-box">
+        <div class="workflow-step"><div class="step-num">1</div><div><b>Chief daily entry</b><br><span class="mini">Chief enters total pictures taken.</span></div><span class="tag yellow">Required nightly</span></div>
+        <div class="workflow-step"><div class="step-num">2</div><div><b>Verifier notification</b><br><span class="mini">Verifier portal receives nighttime notification.</span></div><span class="tag purple">Linked</span></div>
+        <div class="workflow-step"><div class="step-num">3</div><div><b>Verifier confirmation</b><br><span class="mini">Verifier confirms all pictures were checked next day.</span></div><span class="tag green">Next day</span></div>
+      </div>
+    </div>
+
+    <div class="route-type-card stopverify">
+      <h2>Stop & Verify Route</h2>
+      <span class="tag yellow">Chief verifies defects directly</span>
+      <p>Chief confirms how many defects they found themselves. The Field Manager is automatically notified daily of the defect count entered by the Chief. No separate Verifier picture-confirmation step unless assigned by the Field Manager.</p>
+      <div class="workflow-box">
+        <div class="workflow-step"><div class="step-num">1</div><div><b>Chief stop/verify action</b><br><span class="mini">Chief performs verification directly in the field.</span></div><span class="tag yellow">Chief entered</span></div>
+        <div class="workflow-step"><div class="step-num">2</div><div><b>Defect count submitted</b><br><span class="mini">Chief enters number of defects found.</span></div><span class="tag red">Required</span></div>
+        
+      <div class="auto-notify-card">
+        <h3>Stop & Verify FM Auto-Notification</h3>
+        <div class="workflow-step">
+          <div class="step-num">A</div>
+          <div>
+            <b>Chief submits verified defect count</b><br>
+            <span class="mini">Field Manager is automatically notified daily with how many defects the Chief found.</span>
+          </div>
+          <span class="tag yellow">FM notified daily</span>
+        </div>
+      </div>
+<div class="workflow-step"><div class="step-num">3</div><div><b>Field Manager review</b><br><span class="mini">FM sees daily defect totals by truck/route.</span></div><span class="tag blue">Reportable</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Commercial Truck Route Type Assignments</h2>
+    <table class="table">
+      <tr><th>Truck</th><th>Route</th><th>Route Type</th><th>Chief Requirement</th><th>Verifier Link</th><th>FM Notifications</th><th>Status</th></tr>
+      <tr><td>SRS-248</td><td>Gulf Coast</td><td><span class="tag purple">Nonstop</span></td><td>Enter picture count nightly</td><td><span class="verifier-link">VER-22 Portal</span></td><td>Chief count + Verifier confirmation</td><td><span class="tag yellow">Waiting on Chief picture count</span></td></tr>
+      <tr><td>SRS-250</td><td>PD Route</td><td><span class="tag yellow">Stop & Verify</span></td><td>Enter defects found by Chief</td><td><span class="tag gray">None</span></td><td>Daily Chief Verified Defects notification</td><td><span class="tag green">Defect count submitted</span></td></tr>
+    </table>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Nonstop Route Daily Verification + FM Notifications</h2>
+      <label>Truck</label><select><option>SRS-248 — Nonstop — Linked VER-22</option></select>
+      <label>Total Pictures Taken Today</label><input placeholder="Example: 1,248">
+      <label>Automatic Notifications</label>
+      <select>
+        <option>Notify Field Manager when Chief submits picture count + notify Verifier tonight</option>
+        <option>Hold Verifier notification - Field Manager review needed</option>
+      </select>
+      <label>Notes</label><textarea placeholder="Camera, picture quality, or upload notes."></textarea>
+      <button class="btn full">Submit Picture Count + Auto-Notify FM + Notify Verifier</button>
+    </div>
+    <div class="card">
+      <h2>Stop & Verify Daily Defect Count + FM Notification</h2>
+      <label>Truck</label><select><option>SRS-250 — Stop & Verify</option></select>
+      <label>Chief Verified Defects Found</label><input placeholder="Example: 7">
+      <div class="formrow"><input placeholder="Critical"><input placeholder="Non-critical"></div>
+      <label>Automatic Notification</label>
+<select>
+  <option>Notify Field Manager automatically when submitted</option>
+</select>
+
+<label>Notes</label><textarea placeholder="Describe defect findings, locations, and follow-up needed."></textarea>
+      <button class="btn full">Submit Chief Verified Defects + Auto-Notify FM</button>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Verifier Confirmation Queue</h2>
+    <table class="table">
+      <tr><th>Verifier</th><th>Truck</th><th>Picture Count</th><th>FM Notified of Count</th><th>Confirmation Due</th><th>FM Confirmation Notice</th><th>Status</th></tr>
+      <tr><td>verifier@sperryrail.com</td><td>SRS-248</td><td>1,248</td><td><span class="tag green">Yes</span></td><td>Tomorrow</td><td><span class="tag yellow">Pending</span></td><td><span class="tag yellow">Pending Verifier Confirmation</span></td></tr>
+      <tr><td>verifier2@sperryrail.com</td><td>SRS-251</td><td>936</td><td><span class="tag green">Yes</span></td><td>Today</td><td><span class="tag green">FM notified</span></td><td><span class="tag green">Confirmed Checked</span></td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <h2>Overdue Escalation Rules</h2>
+    <div class="grid grid3">
+      <div class="overdue-rule">
+        <b>Chief picture count missing</b><br>
+        <span class="mini">If not submitted by 9:00 PM, status changes to overdue and Field Manager receives escalation.</span><br>
+        <span class="tag red">Escalates nightly</span>
+      </div>
+      <div class="overdue-rule">
+        <b>Verifier confirmation missing</b><br>
+        <span class="mini">If not confirmed the next day, Field Manager receives overdue confirmation alert.</span><br>
+        <span class="tag red">Escalates next day</span>
+      </div>
+      <div class="overdue-rule">
+        <b>Chief Verified Defects missing</b><br>
+        <span class="mini">For Stop & Verify routes, missing verified defect totals trigger Field Manager escalation.</span><br>
+        <span class="tag red">Escalates daily</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tracktime" class="tab">
+  <h1 class="page-title">Track Time + Down Time</h1>
+  <p class="page-sub">Chief-entered track/down time metrics by employee and route group.</p>
+  <div class="grid grid4">
+    <div class="card"><div class="label">Track Time</div><div class="stat purple">31.4h</div><span class="tag purple">Today</span></div>
+    <div class="card"><div class="label">Down Time</div><div class="stat warn">6.2h</div><span class="tag yellow">Today</span></div>
+    <div class="card"><div class="label">Track %</div><div class="stat purple">83%</div></div>
+    <div class="card"><div class="label">Down %</div><div class="stat warn">17%</div></div>
+  </div>
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Employee Track Time Percentages</h2>
+      <div class="scorecard"><div><b>Chief One</b><br><span class="mini">SRS-248 • 32.5 / 40 hrs</span><div class="bar purple"><span style="width:81%"></span></div></div><b class="purple">81%</b></div>
+      <div class="scorecard"><div><b>Chief Two</b><br><span class="mini">SRS-250 • 27 / 40 hrs</span><div class="bar yellow"><span style="width:68%"></span></div></div><b class="warn">68%</b></div>
+    </div>
+    <div class="card">
+      <h2>Field Manager Comparison</h2>
+      <div class="scorecard"><div><b>Your Route Group</b><br><span class="mini">Track time efficiency</span><div class="bar purple"><span style="width:83%"></span></div></div><b class="purple">83%</b></div>
+      <div class="scorecard"><div><b>Company Average</b><br><span class="mini">All field managers</span><div class="bar"><span style="width:76%"></span></div></div><b>76%</b></div>
+    </div>
+  </div>
+</section>
+
+<section id="routes" class="tab">
+  <h1 class="page-title">Routes / Binder</h1>
+  <p class="page-sub">Manage route data, subdivisions, yard locations, contacts, Time & Track PDFs, and preview the field Route Binder.</p>
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Route Subdivisions</h2>
+      <table class="table"><tr><th>Subdivision</th><th>Coverage</th><th>Yard</th><th>PDF</th></tr><tr><td>Mobile Sub</td><td>MP 0–138.4</td><td>Mobile Yard</td><td><button class="btn secondary">Manage PDF</button></td></tr></table>
+      <button class="btn full">Add Subdivision</button>
+    </div>
+    <div class="card">
+      <h2>Add Subdivision Contact</h2>
+      <div class="formrow"><input placeholder="First name"><input placeholder="Last name"></div>
+      <div class="formrow"><input placeholder="Phone"><input placeholder="Email"></div>
+      <div class="formrow"><input placeholder="Job title"><input placeholder="Coverage area: MP to MP"></div>
+      <button class="btn full">Save Contact</button>
+    </div>
+  </div>
+  <div class="section card">
+    <h2>Route Binder Preview</h2>
+    <div class="pdfbox"><b>Mobile Sub Time & Track.pdf</b><p class="mini">Effective: 05/01/2026</p><button class="btn">Open PDF</button><button class="btn secondary">Download Offline</button></div>
+  </div>
+</section>
+
+<section id="templates" class="tab">
+  <h1 class="page-title">Checklist Templates</h1>
+  <p class="page-sub">Edit checklist styles once. Assigned vehicles automatically load the correct checklist.</p>
+  <div class="info"><b>Template rule:</b> Editing a template updates all trucks using that template automatically.</div>
+  <div class="card">
+    <h2>Checklist Template Library</h2>
+    <table class="table">
+      <tr><th>Template</th><th>Used By</th><th>Includes</th><th>Action</th></tr>
+      <tr><td>Commercial Freightliner</td><td>Freightliner Verifiers</td><td>Pre/post, DOT, 50-hour, monthly</td><td><button class="btn secondary">Edit</button></td></tr>
+      <tr><td>Commercial Ford</td><td>Ford Verifiers</td><td>Pre/post, DOT, 50-hour, monthly</td><td><button class="btn secondary">Edit</button></td></tr>
+      <tr><td>Commercial Peterbilt</td><td>Peterbilt Verifiers</td><td>Pre/post, DOT, 50-hour, monthly</td><td><button class="btn secondary">Edit</button></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="reports" class="tab">
+  <h1 class="page-title">Reports</h1>
+  <p class="page-sub">Compliance, route verification, track time, service, and company comparison reporting.</p>
+  <div class="grid grid4">
+    <div class="card"><div class="label">Daily Compliance</div><div class="stat good">92%</div><button class="btn full">Export</button></div>
+    <div class="card"><div class="label">Nonstop FM Notices</div><div class="stat warn">2</div><button class="btn full">Export</button></div>
+    <div class="card"><div class="label">Chief Verified Defects Notices</div><div class="stat">7</div><button class="btn full">Export</button></div>
+    <div class="card"><div class="label">Track Time</div><div class="stat purple">83%</div><button class="btn full">Export</button></div>
+  </div>
+
+  <div class="section card">
+    <h2>Overdue Escalations</h2>
+    <table class="table">
+      <tr><th>Type</th><th>Rule</th><th>Current Count</th><th>Status</th></tr>
+      <tr><td>Nonstop Chief Picture Count</td><td>Overdue after 9:00 PM</td><td>1</td><td><span class="tag yellow">Due tonight</span></td></tr>
+      <tr><td>Verifier Confirmation</td><td>Overdue next day if not confirmed</td><td>1</td><td><span class="tag red">Overdue</span></td></tr>
+      <tr><td>Chief Verified Defects</td><td>Overdue daily if not submitted</td><td>0</td><td><span class="tag green">Current</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="admin" class="tab">
+  <h1 class="page-title">Admin</h1>
+  <p class="page-sub">Assign employees, grant temporary coverage access, send activation links, and remove access.</p>
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Assign Employee to Vehicle</h2>
+      <label>Employee Email</label><input placeholder="employee@sperryrail.com">
+      <label>Employee Role</label><select><option>Driver Mechanic</option><option>Driver Mechanic Chief</option><option>Verifier Chief</option><option>YTV Chief</option><option>Walking Stick Chief</option></select>
+      <label>Vehicle / Asset</label><select><option>SRS-248</option><option>SRS-250</option><option>VER-22</option></select>
+      <label>Checklist Template</label><select><option>Commercial Freightliner</option><option>Commercial Peterbilt</option></select>
+      <button class="btn full">Save Assignment + Send Access Link</button>
+    </div>
+    <div class="card">
+      <h2>Temporary Vehicle Access</h2>
+      <label>Employee Email</label><input placeholder="coverage@sperryrail.com">
+      <label>Vehicle</label><select><option>SRS-248</option><option>SRS-250</option></select>
+      <div class="formrow"><div><label>Start</label><input type="date"></div><div><label>End</label><input type="date"></div></div>
+      <button class="btn full">Grant Temporary Access</button>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+function switchTab(id, btn){
+  document.querySelectorAll('.tab').forEach(function(tab){ tab.classList.remove('active'); });
+  var target = document.getElementById(id);
+  if(target){ target.classList.add('active'); }
+  document.querySelectorAll('.nav button').forEach(function(button){ button.classList.remove('active'); });
+  if(btn){ btn.classList.add('active'); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.nav button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){ switchTab(btn.getAttribute('data-tab'), btn); });
+  });
+});
+</script>
+</body>
+</html>

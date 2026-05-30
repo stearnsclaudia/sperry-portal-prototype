@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Driver Mechanic Portal - Optimized</title>
+<style>
+:root{--blue:#123f73;--blue2:#0b2b50;--yellow:#f7c948;--bg:#f4f6f8;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--green:#16a34a;--red:#dc2626;--orange:#f59e0b;--line:#e5e7eb;--purple:#7c3aed;--softblue:#eaf1f9}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;padding:22px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:24px;font-weight:950}.subtitle{font-size:13px;opacity:.88;margin-top:4px}.user{text-align:right;font-size:14px}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.14);margin-top:6px;font-size:12px}
+.layout{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 82px)}
+.sidebar{background:white;border-right:1px solid var(--line);padding:18px}
+.nav button{width:100%;border:0;background:transparent;text-align:left;padding:14px;border-radius:12px;font-size:16px;font-weight:800;color:#334155;margin-bottom:8px;cursor:pointer}
+.nav button.active,.nav button:hover{background:var(--softblue);color:var(--blue)}
+.rolebox{margin-top:22px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.4}
+.main{padding:24px;max-width:1360px}.tab{display:none}.tab.active{display:block}
+.page-title{font-size:28px;font-weight:950;margin:0 0 4px}.page-sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;gap:16px}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.04)}
+.card h2,.card h3{margin-top:0}.stat{font-size:34px;font-weight:950;margin:6px 0}.stat.small{font-size:24px}
+.label{font-size:13px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.good{color:var(--green)}.warn{color:var(--orange)}.bad{color:var(--red)}.purple{color:var(--purple)}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--blue);color:white;font-weight:850;cursor:pointer;margin:4px 4px 4px 0}
+.btn.secondary{background:#e5e7eb;color:#111827}.btn.yellow{background:var(--yellow);color:#111827}.btn.danger{background:var(--red)}.btn.greenbtn{background:var(--green)}.btn.disabled{background:#9ca3af;color:white;cursor:not-allowed}.btn.full{width:100%;margin-top:10px}
+.bigbtn{padding:18px 16px;font-size:17px;border-radius:16px}
+.tag{display:inline-block;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:850;white-space:nowrap;margin:2px}
+.tag.green{background:#dcfce7;color:#166534}.tag.red{background:#fee2e2;color:#991b1b}.tag.yellow{background:#fef3c7;color:#92400e}.tag.blue{background:#dbeafe;color:#1e40af}.tag.gray{background:#f3f4f6;color:#374151}.tag.purple{background:#ede9fe;color:#5b21b6}.tag.black{background:#111827;color:white}
+.table-wrap{width:100%;overflow-x:auto}.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+.table th{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;background:#f8fafc}
+.section{margin-top:22px}.split{display:flex;gap:10px;flex-wrap:wrap}
+.notice{border-left:5px solid var(--yellow);background:#fffbeb;padding:14px;border-radius:12px;margin-bottom:16px}
+.info{border-left:5px solid var(--blue);background:#eff6ff;padding:14px;border-radius:12px;margin-bottom:16px}
+.locked{border-left:5px solid var(--red);background:#fef2f2;padding:14px;border-radius:12px;margin-bottom:16px}
+.formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font-size:15px;background:white}
+textarea{min-height:90px}label{display:block;font-weight:800;margin:10px 0 6px}
+.checkrow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px;margin:8px 0}
+.service-schedule{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;margin:10px 0}
+.service-head{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.service-details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.next-due-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;margin-top:12px}
+.next-due-box b{color:#1e40af}
+.compliance-item{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;margin:10px 0}
+.compliance-head{display:grid;grid-template-columns:1fr 180px;gap:12px;align-items:center}
+.noncompliance-required{display:none;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;padding:12px;border-radius:14px;background:#fff7ed;border:1px solid #fed7aa}
+.compliance-item.show-required .noncompliance-required{display:grid}
+.compliance-item.show-required .required-note{display:block}
+.noncompliance-required label{margin-top:0}
+.required-note{display:none;font-size:12px;font-weight:800;color:#9a3412;margin-top:6px}
+.auto-classification{display:none;margin-top:12px;padding:12px;border-radius:14px;border:1px solid #fed7aa;background:#fff7ed}
+.compliance-item.show-required .auto-classification{display:block}
+.auto-classification .classification-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.classification-box{background:white;border:1px solid #fed7aa;border-radius:12px;padding:10px}
+.classification-box b{display:block;font-size:12px;color:#9a3412;text-transform:uppercase;letter-spacing:.04em}
+.oos-critical{border-color:#fecaca!important;background:#fef2f2!important}
+.oos-critical b{color:#991b1b!important}
+@media(max-width:950px){.auto-classification .classification-grid{grid-template-columns:1fr}}
+.mini{font-size:12px;color:var(--muted)}
+.pdfbox{border:2px dashed #94a3b8;border-radius:14px;padding:14px;background:#f8fafc;margin:8px 0 14px}
+.quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 22px}.quick-actions .btn{width:100%;padding:18px 12px;border-radius:16px;font-size:16px}.mega-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 24px}.mega-actions .btn{width:100%;min-height:76px;border-radius:20px;font-size:18px}.status-block{border-radius:18px;padding:16px;border:1px solid var(--line);background:white}.status-block.good{border-left:7px solid var(--green)}.status-block.warn{border-left:7px solid var(--orange)}.status-block.bad{border-left:7px solid var(--red)}.status-block.purple{border-left:7px solid var(--purple)}.service-timeline{display:grid;gap:12px}.service-event{border-left:6px solid var(--blue);background:#fbfdff;border-radius:14px;padding:14px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.service-event.green{border-left-color:var(--green)}.service-event.yellow{border-left-color:var(--orange)}.service-event.red{border-left-color:var(--red)}
+.event-log-card{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px;margin:12px 0}
+.event-log-card h3{margin:0 0 8px}
+.location-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.location-chip{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:850;margin:3px}
+.map-placeholder{height:170px;border:2px dashed #94a3b8;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:grid;place-items:center;color:#475569;font-weight:850;margin-top:12px;text-align:center}
+@media(max-width:950px){.location-grid{grid-template-columns:1fr}}
+.timeline-item{border-left:5px solid var(--blue);background:#fbfdff;border-radius:14px;padding:14px;margin-bottom:10px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.timeline-item.green{border-left-color:var(--green)}.timeline-item.yellow{border-left-color:var(--orange)}.timeline-item.red{border-left-color:var(--red)}.timeline-item.purple{border-left-color:var(--purple)}
+.health-ring{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) 0 84%, #e5e7eb 84% 100%);font-size:28px;font-weight:950;color:#166534;margin:auto}
+.oos-box{border:2px solid #fecaca;background:#fef2f2;border-radius:16px;padding:14px;margin-top:12px;display:none}
+.compliance-item.show-required .oos-box{display:block}
+.help-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.help-grid .btn{width:100%;min-height:58px}
+.syncbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.logout-list{display:grid;gap:10px}
+.logout-item{display:grid;grid-template-columns:1fr auto;align-items:center;border:1px solid var(--line);background:#fbfdff;border-radius:14px;padding:12px}
+.lock-banner{border:3px solid #fecaca;background:#fef2f2;border-radius:22px;padding:22px;margin:18px 0;color:#7f1d1d}
+.lock-banner h2{font-size:28px;margin:0 0 8px}
+.critical-alert{border:3px solid #fed7aa;background:#fff7ed;border-radius:22px;padding:18px;margin:18px 0}
+.critical-alert h2{margin:0 0 12px;color:#9a3412}
+.service-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}
+.service-green{background:#dcfce7;color:#166534}.service-yellow{background:#fef3c7;color:#92400e}.service-orange{background:#ffedd5;color:#9a3412}.service-red{background:#fee2e2;color:#991b1b}
+.contact-card{border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:14px;margin-bottom:12px}
+.contact-card.manager{border-left:6px solid var(--blue)}
+.contact-card.chief{border-left:6px solid var(--green)}
+.contact-card.verifier{border-left:6px solid var(--purple)}
+.route-awareness{border:2px solid #ddd6fe;background:#faf5ff;border-radius:18px;padding:16px;margin:14px 0}
+.picture-count-box{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;margin-top:12px}
+.picture-count-box strong{font-size:24px;color:var(--purple)}
+.ready-banner{border:4px solid #fecaca;background:#fef2f2;border-radius:26px;padding:24px;margin:18px 0;color:#7f1d1d}
+.ready-banner h2{font-size:34px;margin:0 0 10px}
+.ready-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.ready-item{background:white;border:1px solid #fecaca;border-radius:14px;padding:12px;font-weight:850}
+.driver-task-list{display:grid;gap:10px}
+.driver-task{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:12px}
+.today-main-card{border:2px solid #bfdbfe;background:#eff6ff;border-radius:22px;padding:18px}
+.today-main-card h2{margin-top:0}
+.route-banner{border:3px solid #ddd6fe;background:#faf5ff;border-radius:24px;padding:22px;margin:18px 0}
+.route-banner h2{font-size:30px;margin:0 0 8px;color:#5b21b6}
+.route-banner .route-big{font-size:38px;font-weight:950;color:#5b21b6;margin:8px 0}
+.expectation-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.expectation-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0}
+.expectation-row:last-child{border-bottom:0}
+.quick-contact{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px}
+.quick-contact.manager{border-left:7px solid var(--blue)}
+.quick-contact.chief{border-left:7px solid var(--green)}
+.quick-contact.verifier{border-left:7px solid var(--purple)}
+.quick-contact h3{margin:0 0 4px}
+.quick-contact .name{font-size:22px;font-weight:950;margin-bottom:4px}
+.quick-contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.assignment-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.assignment-card b{font-size:18px}
+.driver-comm-hero{border:3px solid #bfdbfe;background:#eff6ff;border-radius:24px;padding:22px;margin:18px 0}
+.driver-comm-hero h2{font-size:30px;margin:0 0 8px;color:#1e40af}
+.driver-chat-card{border:1px solid var(--line);border-radius:20px;background:#fff;padding:18px;border-left:8px solid var(--purple);box-shadow:0 8px 18px rgba(15,23,42,.04)}
+.unread-badge{display:inline-block;background:#fee2e2;color:#991b1b;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:950;margin-left:6px}
+.driver-contact{border:1px solid var(--line);border-radius:18px;background:#fbfdff;padding:16px;margin-bottom:12px}
+.driver-contact.chief{border-left:7px solid var(--green)}
+.driver-contact.manager{border-left:7px solid var(--blue)}
+.driver-contact.verifier{border-left:7px solid var(--purple)}
+.driver-contact .name{font-size:22px;font-weight:950;margin-bottom:4px}
+.contact-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.alert-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px;margin-bottom:12px;border-left:7px solid var(--orange)}
+.alert-card.urgent{border-left-color:var(--red);background:#fff7f7}
+.issue-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}
+.recent-message{border-bottom:1px solid var(--line);padding:12px 0}
+.recent-message:last-child{border-bottom:0}
+.live-status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:950;margin:4px 0}
+.live-status.testing{background:#ede9fe;color:#5b21b6}
+.live-status.pending{background:#fef3c7;color:#92400e}
+.live-status.auto{background:#dcfce7;color:#166534}
+@media(max-width:950px){.contact-actions{grid-template-columns:1fr}}
+@media(max-width:950px){.ready-grid,.quick-contact-actions,.expectation-row{grid-template-columns:1fr}}
+@media(max-width:950px){.help-grid{grid-template-columns:1fr}.mega-actions{grid-template-columns:1fr}}
+@media(max-width:950px){.quick-actions{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:2}.nav{display:flex;overflow:auto}.nav button{min-width:135px;text-align:center}.grid4,.grid3,.grid2,.formrow{grid-template-columns:1fr}.header{align-items:flex-start;flex-direction:column}.user{text-align:left}.main{padding:16px}}
+
+
+/* ===== Driver Mechanic standalone responsive optimization ===== */
+html{scroll-behavior:smooth}
+body{-webkit-text-size-adjust:100%}
+img,video,canvas{max-width:100%;height:auto}
+*{min-width:0}
+button,.btn{min-height:44px;touch-action:manipulation}
+input,select,textarea{max-width:100%;font-size:16px}
+.card,.ready-banner,.today-main-card,.route-banner,.driver-chat-card,.driver-contact,.alert-card,.issue-card,.timeline-item,.service-event,.service-schedule,.status-block,.event-log-card,.lock-banner,.critical-alert,.contact-card,.route-awareness,.ratio-card,.pdfbox,.compliance-item{
+  overflow-wrap:anywhere;
+}
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table,.table{min-width:720px}
+
+/* Better fluid grids */
+.grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.grid3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.quick-actions{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.mega-actions{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.help-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.ready-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.service-details{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.location-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.ratio-split{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.contact-actions,.quick-contact-actions{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+
+/* iPad / small laptop */
+@media (max-width:1180px){
+  .main{padding:20px}
+  .layout{grid-template-columns:220px 1fr}
+  .nav button{font-size:15px;padding:12px}
+  .card{padding:16px}
+  .route-banner .route-big,.big-percent{font-size:34px!important}
+}
+
+/* iPad portrait + phones */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr!important}
+  .header{align-items:flex-start!important;flex-direction:column!important;padding:18px 16px!important}
+  .logo{font-size:22px!important}
+  .subtitle{font-size:12px!important}
+  .user{text-align:left!important}
+
+  .sidebar{
+    position:sticky!important;
+    top:0!important;
+    z-index:50!important;
+    border-right:0!important;
+    border-bottom:1px solid var(--line)!important;
+    padding:10px!important;
+    background:white!important;
+  }
+  .nav{
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:6px!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .nav button{
+    min-width:150px!important;
+    text-align:center!important;
+    margin-bottom:0!important;
+    padding:12px 10px!important;
+    font-size:14px!important;
+    white-space:nowrap!important;
+  }
+  .rolebox{display:none!important}
+  .main{padding:14px!important}
+
+  .grid,.grid2,.grid3,.grid4,.formrow,.ready-grid,.quick-actions,.mega-actions,.help-grid,.service-details,.location-grid,.ratio-split,.contact-actions,.quick-contact-actions,.driver-task,.logout-item,.service-head,.compliance-head,.noncompliance-required,.auto-classification .classification-grid,.expectation-row{
+    grid-template-columns:1fr!important;
+  }
+
+  .page-title{font-size:26px!important}
+  .page-sub{font-size:14px!important;margin-bottom:14px!important}
+  .section{margin-top:16px!important}
+
+  .card,.ready-banner,.today-main-card,.route-banner,.driver-chat-card,.driver-contact,.alert-card,.issue-card,.timeline-item,.service-event,.service-schedule,.status-block,.event-log-card,.lock-banner,.critical-alert,.contact-card,.route-awareness,.ratio-card,.compliance-item{
+    padding:16px!important;
+    border-radius:18px!important;
+  }
+
+  .stat{font-size:28px!important}
+  .stat.small{font-size:22px!important}
+  .route-banner .route-big,.big-percent,.health-ring{font-size:30px!important}
+  .ready-banner h2,.driver-comm-hero h2,.lock-banner h2,.critical-alert h2{font-size:26px!important}
+  .btn.full,.bigbtn{width:100%!important}
+  table,.table{min-width:760px!important}
+}
+
+/* Phones */
+@media (max-width:600px){
+  .main{padding:10px!important}
+  .header{padding:16px 14px!important}
+  .logo{font-size:20px!important}
+  .page-title{font-size:24px!important}
+  .card h2,.card h3,.ready-banner h2,.driver-comm-hero h2,.lock-banner h2,.critical-alert h2{font-size:19px!important}
+  .card,.ready-banner,.today-main-card,.route-banner,.driver-chat-card,.driver-contact,.alert-card,.issue-card,.timeline-item,.service-event,.service-schedule,.status-block,.event-log-card,.lock-banner,.critical-alert,.contact-card,.route-awareness,.ratio-card,.compliance-item{
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .tag,.pill,.live-status,.unread-badge,.service-pill,.location-chip{font-size:11px!important}
+  .nav button{min-width:135px!important;font-size:13px!important}
+  table,.table{min-width:780px!important}
+}
+/* ===== End Driver Mechanic standalone responsive optimization ===== */
+
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <div class="logo">Driver Mechanic Portal</div>
+    <div class="subtitle">Auto-loaded from Field Manager assignment • Required pre-trip gate • Required post-trip gate</div>
+  </div>
+  <div class="user">Signed in with Sperry Rail SSO<br><span class="pill">Driver Mechanic View</span></div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <nav class="nav">
+    <button class="active" onclick="showTab('today',this)">Today</button>
+    <button onclick="showTab('communications',this)">Communications</button>
+    <button onclick="showTab('dot',this)">DOT Hours</button>
+    <button onclick="showTab('daily',this)">Daily Checklist</button>
+    <button onclick="showTab('pm',this)">50-Hour PM</button>
+    <button onclick="showTab('monthly',this)">Monthly</button>
+    <button onclick="showTab('service',this)">Service History</button>
+    <button onclick="showTab('crewnotes',this)">Crew Notes</button>
+    <button onclick="showTab('endshift',this)">End Shift</button>
+    <button onclick="showTab('help',this)">Need Help</button>
+    <button onclick="showTab('contacts',this)">Contacts</button>
+    <button onclick="showTab('binder',this)">Route Binder</button>
+  </nav>
+  <div class="rolebox">
+    <b>Driver rules:</b><br>
+    You cannot start driving until pre-trip is submitted. You cannot log out/end shift until post-trip is submitted. Checklist submissions automatically notify the Chief and Field Manager.
+  </div>
+</aside>
+
+<main class="main">
+
+
+
+
+
+<section id="today" class="tab active">
+  <h1 class="page-title">Today</h1>
+  <p class="page-sub">Start-of-day driver view: can I move, what truck am I in, what route am I on, and who do I contact?</p>
+
+  <div class="ready-banner">
+    <h2>🔒 NOT READY TO DRIVE</h2>
+    <p><b>Pre-trip must be completed and submitted before public road driving can begin.</b></p>
+    <div class="ready-grid">
+      <div class="ready-item">❌ Pre-trip incomplete</div>
+      <div class="ready-item">⚫ DOT clock not started</div>
+      <div class="ready-item">🟡 50-hour PM due today</div>
+      <div class="ready-item">✅ No confirmed OOS yet</div>
+    </div>
+  </div>
+
+  <div class="grid grid2 section">
+    <div class="today-main-card">
+      <h2>Assigned Truck</h2>
+      <div class="stat small">SRS-248</div>
+      <span class="tag blue">2026 Freightliner M2</span>
+      <span class="tag blue">Commercial Verifier</span>
+      <p class="mini">Driver Mechanic: Claudia Stearns</p>
+    </div>
+
+    <div class="route-banner" style="margin:0;">
+      <div class="label">Today’s Route Info</div>
+      <div class="route-big">🟣 NONSTOP ROUTE</div>
+      <p><b>Route:</b> PD • Mobile Subdivision</p>
+      <p><b>Linked verifier:</b> VER-22 • Sarah Miller</p>
+      <p class="page-sub"><b>Driver awareness:</b> Chief submits nightly picture count. You may receive a notification for awareness only. No driver action required.</p>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Required Driver Actions Today</h2>
+      <div class="driver-task-list">
+        <div class="driver-task"><span>Complete pre-trip</span><span class="tag red">Required first</span></div>
+        <div class="driver-task"><span>Start DOT/public-road status after pre-trip</span><span class="tag gray">Locked</span></div>
+        <div class="driver-task"><span>Complete 50-hour PM</span><span class="tag yellow">Due today</span></div>
+        <div class="driver-task"><span>Complete post-trip before logout</span><span class="tag red">Required</span></div>
+        <div class="driver-task"><span>Leave crew note if anything changed</span><span class="tag gray">If needed</span></div>
+      </div>
+      <button class="btn yellow full bigbtn" onclick="showTab('daily', document.querySelectorAll('.nav button')[2])">Complete Pre-Trip</button>
+    </div>
+
+    <div class="card">
+      <h2>Quick Contacts</h2>
+      <div class="quick-contact manager">
+        <h3>Field Manager</h3>
+        <div class="name">Mike Reynolds</div>
+        <div class="mini">(555) 555-2100 • mike.reynolds@sperryrail.com</div>
+        <div class="quick-contact-actions"><button class="btn">Call</button><button class="btn secondary">Email</button></div>
+      </div>
+      <div class="quick-contact chief">
+        <h3>Chief</h3>
+        <div class="name">John Carter</div>
+        <div class="mini">(555) 555-3100 • john.carter@sperryrail.com</div>
+        <div class="quick-contact-actions"><button class="btn greenbtn">Call</button><button class="btn secondary">Email</button></div>
+      </div>
+      <div class="quick-contact verifier">
+        <h3>Linked Verifier</h3>
+        <div class="name">Sarah Miller</div>
+        <div class="mini">(555) 555-4100 • sarah.miller@sperryrail.com</div>
+        <span class="tag purple">Nonstop route only</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Previous Crew Notes</h2>
+      <p class="page-sub">Read this before moving the truck.</p>
+      <div class="crew-note previous">
+        <b>Yesterday — Driver A</b><br>
+        <span class="mini">Truck pulls slightly right. Tire shop scheduled. Monitor front tire.</span>
+      </div>
+      <div class="crew-note previous">
+        <b>Last week — Driver B</b><br>
+        <span class="mini">Encoder belt changed. Running normal.</span>
+      </div>
+      <button class="btn secondary full" onclick="showTab('crewnotes', document.querySelectorAll('.nav button')[7])">Open Crew Notes</button>
+    </div>
+
+    <div class="card">
+      <h2>Known Issues + Service Coming Up</h2>
+      <div class="timeline-item yellow"><b>🟡 Hydraulic seep</b><br><span class="mini">Rear carriage. Monitor during pre-trip.</span></div>
+      <div class="service-event orange"><b>Oil + Filter</b><br><span class="mini">Due in 8 days.</span><br><span class="service-pill service-orange">&lt;14 days</span></div>
+      <div class="service-event yellow"><b>Annual DOT Inspection</b><br><span class="mini">Due in 42 days.</span><br><span class="service-pill service-yellow">14–60 days</span></div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Track Time vs Down Time</h2>
+    <p class="page-sub">View-only. Track time and down time are entered by the Chief.</p>
+
+    <div class="grid grid3">
+      <div class="ratio-card">
+        <div class="label">Track Time</div>
+        <div class="big-percent purple">84%</div>
+        <div class="bar purple"><span style="width:84%"></span></div>
+        <span class="mini">6.7 hrs testing</span>
+      </div>
+
+      <div class="ratio-card">
+        <div class="label">Down Time</div>
+        <div class="big-percent warn">16%</div>
+        <div class="bar yellow"><span style="width:16%"></span></div>
+        <span class="mini">1.3 hrs down</span>
+      </div>
+
+      <div class="ratio-card">
+        <div class="label">Main Down Reason</div>
+        <div class="big-percent warn">Pilot</div>
+        <span class="tag yellow">Pilot delay</span>
+        <p class="mini">Entered by Chief at 11:46 AM.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Communication Snapshot</h2>
+    <div class="grid grid3">
+      <div class="driver-chat-card">
+        <h3>SRS-248 Chat <span class="unread-badge">2 unread</span></h3>
+        <span class="live-status testing">🟣 Active Route Chat</span>
+        <p class="mini">Chief • Field Manager • Verifier</p>
+      </div>
+      <div class="alert-card">
+        <b>Weather Alert</b><br>
+        <span class="mini">Possible delay later tonight.</span><br>
+        <span class="tag yellow">Operations</span>
+      </div>
+      <div class="driver-contact chief">
+        <b>Chief Contact</b><br>
+        <span class="mini">John Carter • Track/down time active</span><br>
+        <span class="tag green">Available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+<section id="communications" class="tab">
+  <h1 class="page-title">Communications</h1>
+  <p class="page-sub">Driver-focused communication for your truck, Chief, Field Manager, verifier, safety notices, and quick issue reporting.</p>
+
+  <div class="driver-comm-hero">
+    <h2>SRS-248 Operations Communication</h2>
+    <p><b>Route:</b> PD / Mobile Subdivision • <b>Route Type:</b> Nonstop • <b>Status:</b> Not ready to drive until pre-trip is submitted</p>
+    <span class="tag blue">Driver Mechanic</span>
+    <span class="tag green">Chief</span>
+    <span class="tag purple">Verifier</span>
+    <span class="tag yellow">Field Manager</span>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="driver-chat-card">
+      <h2>Active Route Operations Chat <span class="unread-badge">2 unread</span></h2>
+      <p class="page-sub">Crew communication tied to this truck and route.</p>
+
+      <div class="recent-message">
+        <b>Chief — John Carter</b><br>
+        <span class="mini">Need extra awareness near MP 44 due to glare/photo issue.</span><br>
+        <span class="tag purple">12 min ago</span>
+      </div>
+
+      <div class="recent-message">
+        <b>Field Manager — Mike Reynolds</b><br>
+        <span class="mini">Weather delay possible later tonight. Keep notes updated.</span><br>
+        <span class="tag yellow">35 min ago</span>
+      </div>
+
+      <div class="recent-message">
+        <b>Verifier — Sarah Miller</b><br>
+        <span class="mini">I’ll review picture set tomorrow after Chief submits count.</span><br>
+        <span class="tag gray">Yesterday</span>
+      </div>
+
+      <button class="btn full">Open SRS-248 Chat</button>
+    </div>
+
+    <div class="card">
+      <h2>My Operational Contacts</h2>
+
+      <div class="driver-contact chief">
+        <h3>Chief</h3>
+        <div class="name">John Carter</div>
+        <span class="live-status testing">🟣 TESTING / ON ROUTE</span>
+        <p class="mini">SRS-248 • Track/down time control • Checklist review</p>
+        <div class="contact-actions">
+          <button class="btn greenbtn">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+
+      <div class="driver-contact manager">
+        <h3>Field Manager</h3>
+        <div class="name">Mike Reynolds</div>
+        <p class="mini">(555) 555-2100 • mike.reynolds@sperryrail.com</p>
+        <div class="contact-actions">
+          <button class="btn">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+
+      <div class="driver-contact verifier">
+        <h3>Linked Verifier</h3>
+        <div class="name">Sarah Miller</div>
+        <span class="live-status pending">NONSTOP ROUTE ONLY</span>
+        <p class="mini">VER-22 • Picture confirmation tomorrow • Awareness only for driver</p>
+        <div class="contact-actions">
+          <button class="btn secondary">Message</button>
+          <button class="btn secondary">Call</button>
+          <button class="btn secondary">Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Safety / Operations Alerts</h2>
+
+      <div class="alert-card urgent">
+        <b>⚠ Pre-trip required before driving</b><br>
+        <span class="mini">Public road driving remains locked until pre-trip is submitted.</span><br>
+        <span class="tag red">Required</span>
+      </div>
+
+      <div class="alert-card">
+        <b>Weather delay possible</b><br>
+        <span class="mini">Field Manager noted possible delay later tonight.</span><br>
+        <span class="tag yellow">Operations alert</span>
+      </div>
+
+      <div class="alert-card">
+        <b>Picture count awareness</b><br>
+        <span class="mini">Chief submits nightly picture count. You may receive an awareness notification only.</span><br>
+        <span class="tag purple">Nonstop route</span>
+      </div>
+    </div>
+
+    <div class="issue-card">
+      <h2>Quick Report Issue</h2>
+      <p class="page-sub">Send an issue to the right person without searching contacts.</p>
+
+      <label>Issue Type</label>
+      <select>
+        <option>Mechanical issue</option>
+        <option>Safety issue</option>
+        <option>Route / railroad issue</option>
+        <option>Equipment problem</option>
+        <option>Hotel / travel issue</option>
+        <option>Checklist question</option>
+        <option>Other</option>
+      </select>
+
+      <label>Send To</label>
+      <select>
+        <option>Chief + Field Manager</option>
+        <option>Chief only</option>
+        <option>Field Manager only</option>
+        <option>Maintenance + Field Manager</option>
+      </select>
+
+      <label>Priority</label>
+      <select>
+        <option>Normal</option>
+        <option>Important</option>
+        <option>Urgent / Safety Critical</option>
+      </select>
+
+      <label>Message</label>
+      <textarea placeholder="Describe the issue, location, and what help you need."></textarea>
+
+      <label>Attach Photo</label>
+      <input type="file" accept="image/*" capture="environment">
+
+      <button class="btn full">Send Issue Report</button>
+    </div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Crew Handoff Notes</h2>
+      <div class="timeline-item yellow">
+        <b>Previous Crew Note</b><br>
+        <span class="mini">Truck pulls slightly right. Tire shop scheduled. Monitor front tire.</span>
+      </div>
+      <div class="timeline-item green">
+        <b>Chief Note</b><br>
+        <span class="mini">Encoder belt replaced last week. Running normal.</span>
+      </div>
+      <button class="btn secondary full" onclick="showTab('crewnotes', document.querySelectorAll('.nav button')[7])">Open Crew Notes</button>
+    </div>
+
+    <div class="card">
+      <h2>Message History</h2>
+      <table class="table">
+        <tr><th>From</th><th>Message</th><th>Time</th></tr>
+        <tr><td>Chief</td><td>Review MP 44 area carefully.</td><td>12 min ago</td></tr>
+        <tr><td>Field Manager</td><td>Weather delay possible later.</td><td>35 min ago</td></tr>
+        <tr><td>Verifier</td><td>Picture review tomorrow.</td><td>Yesterday</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="dot" class="tab">
+  <h1 class="page-title">DOT Hours + Truck GPS</h1>
+  <p class="page-sub">Driver Mechanics see automatic truck GPS and public-road DOT driving. Testing and down time are entered by the Chief only.</p>
+
+  <div class="locked">
+    <b>Locked:</b> Public-road driving status is unavailable until the required pre-trip is complete.
+  </div>
+
+  <div class="grid grid4">
+    <div class="card"><div class="label">Truck GPS</div>
+  <div class="section card">
+    <h2>Route Type / Verification</h2>
+    <table class="table">
+      <tr><th>Route Type</th><th>Driver Notification</th><th>Chief Responsibility</th><th>Verifier Responsibility</th></tr>
+      <tr>
+        <td><span class="tag purple">Nonstop Route</span></td>
+        <td>Nightly picture count awareness notification</td>
+        <td>Submit how many pictures were taken each day</td>
+        <td>Confirm all pictures were checked the next day</td>
+      </tr>
+    </table>
+  </div>
+<div class="stat small good">Active</div><span class="tag green">Auto location</span></div>
+    <div class="card"><div class="label">Public Road Drive Used</div><div class="stat good">0.0h</div></div>
+    <div class="card"><div class="label">Public Road Drive Left</div><div class="stat good">11.0h</div></div>
+    <div class="card"><div class="label">Rail Status</div><div class="stat small">View Only</div><span class="tag gray">Chief entered</span></div>
+  </div>
+
+  <div class="section grid grid2">
+    <div class="card">
+      <h2>Public Road Driving</h2>
+      <p class="page-sub">Driver Mechanic controls public-road DOT status. GPS location is captured automatically when driving starts/stops.</p>
+      <button class="btn disabled full bigbtn">Start Public Road Driving Locked</button>
+      <button class="btn disabled full bigbtn">Stop Public Road Driving Locked</button>
+      <button class="btn secondary full bigbtn">Off Duty</button>
+
+      <div class="event-log-card">
+        <h3>Automatic Truck GPS Event</h3>
+        <span class="location-chip">Start: Auto GPS</span>
+        <span class="location-chip">End: Auto GPS</span>
+        <span class="location-chip">Mileage: Auto / odometer</span>
+        <table class="table">
+          <tr><th>Event</th><th>Time</th><th>Location</th><th>DOT Drive?</th></tr>
+          <tr><td>Started public road driving</td><td>06:14 AM</td><td>Holiday Inn - Mobile, AL</td><td><span class="tag red">Yes</span></td></tr>
+          <tr><td>Stopped public road driving</td><td>07:03 AM</td><td>Mobile Yard</td><td><span class="tag red">Yes</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Chief-Entered Rail Status</h2>
+      <div class="section ratio-card">
+        <h3>Today’s Rail Time Ratio</h3>
+        <div class="ratio-split">
+          <div>
+            <div class="label">Track Time</div>
+            <div class="big-percent purple">84%</div>
+            <div class="bar purple"><span style="width:84%"></span></div>
+          </div>
+          <div>
+            <div class="label">Down Time</div>
+            <div class="big-percent warn">16%</div>
+            <div class="bar yellow"><span style="width:16%"></span></div>
+          </div>
+        </div>
+        <p class="mini">Calculated from Chief-entered testing/down-time events.</p>
+      </div>
+      <p class="page-sub">Testing time and down time are not entered by the Driver Mechanic. The assigned Chief controls these records.</p>
+
+      <div class="event-log-card">
+        <h3>Rail Status — View Only</h3>
+        <span class="location-chip">Entered by Chief</span>
+        <span class="location-chip">Mobile Subdivision</span>
+        <span class="location-chip">MP 22.3 → MP 71.8</span>
+        <table class="table">
+          <tr><th>Status</th><th>Time</th><th>Location</th><th>DOT Drive?</th></tr>
+          <tr><td><span class="tag purple">Testing</span></td><td>08:12 AM – 11:46 AM</td><td>Mobile Sub • Track 1</td><td><span class="tag gray">No</span></td></tr>
+          <tr><td><span class="tag yellow">Down Time</span></td><td>11:46 AM – 12:17 PM</td><td>PD Sub • MP 44.8</td><td><span class="tag gray">No</span></td></tr>
+        </table>
+      </div>
+
+      <div class="notice">
+        <b>Driver Mechanic Rule:</b><br>
+        You can view testing/down time for awareness, but only the Chief can start, stop, or edit those events.
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Driver Mechanic Location Log</h2>
+    <p class="page-sub">This log shows automatic truck GPS events and Chief-entered rail events separately.</p>
+
+    <div class="table-wrap">
+      <table class="table">
+        <tr>
+          <th>Event Type</th>
+          <th>Entered By</th>
+          <th>Time</th>
+          <th>Location</th>
+          <th>Details</th>
+          <th>Driver Editable?</th>
+        </tr>
+        <tr>
+          <td>Public road driving start</td>
+          <td>Auto GPS / Driver status</td>
+          <td>06:14 AM</td>
+          <td>Holiday Inn - Mobile, AL</td>
+          <td>DOT drive started</td>
+          <td><span class="tag blue">Driver status only</span></td>
+        </tr>
+        <tr>
+          <td>Public road driving stop</td>
+          <td>Auto GPS / Driver status</td>
+          <td>07:03 AM</td>
+          <td>Mobile Yard</td>
+          <td>DOT drive stopped</td>
+          <td><span class="tag blue">Driver status only</span></td>
+        </tr>
+        <tr>
+          <td>Railroad testing</td>
+          <td>Chief</td>
+          <td>08:12 AM</td>
+          <td>Mobile Sub • MP 22.3</td>
+          <td>Testing started</td>
+          <td><span class="tag gray">No</span></td>
+        </tr>
+        <tr>
+          <td>Down time</td>
+          <td>Chief</td>
+          <td>11:46 AM</td>
+          <td>PD Sub • MP 44.8</td>
+          <td>Pilot delay</td>
+          <td><span class="tag gray">No</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="map-placeholder">
+      Truck GPS Map Placeholder<br>
+      Automatic road-driving GPS • Chief-entered testing/down time overlay
+    </div>
+  </div>
+</section>
+
+
+
+
+<section id="daily" class="tab">
+  <h1 class="page-title">Daily Checklist</h1>
+  <div class="route-awareness"><h2>Daily Route Context</h2><span class="tag purple">Nonstop Route</span> <span class="tag gray">Driver awareness only for nightly picture count</span></div>
+  <p class="page-sub">Pre-trip unlocks driving. If an item is Not In Compliance, the system automatically classifies severity and operating status.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Pre-Trip Checklist</h2>
+      <div class="notice"><b>Auto-classification:</b> Driver cannot choose severity or OOS status. The system classifies the defect after “Not In Compliance” is selected.</div>
+      <span class="tag yellow">Required before driving</span>
+      <div class="compliance-item" data-rule="fluids">
+        <div class="compliance-head">
+          <strong>Engine oil / coolant / washer fluid</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item" data-rule="brakes_tires_lights">
+        <div class="compliance-head">
+          <strong>Air brakes / lights / tires</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item" data-rule="hirail">
+        <div class="compliance-head">
+          <strong>Hi-rail raise/lower</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item" data-rule="shunts_encoder">
+        <div class="compliance-head">
+          <strong>Shunts / encoder belts</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item" data-rule="safety_equipment">
+        <div class="compliance-head">
+          <strong>Fire extinguisher / triangles / safety gear</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <label>General Pre-Trip Notes</label>
+      <textarea placeholder="Optional general notes..."></textarea>
+      <button class="btn greenbtn full bigbtn">Submit Pre-Trip + Notify Chief/Field Manager</button>
+    </div>
+
+    <div class="card">
+      <h2>Post-Trip Checklist</h2>
+      <span class="tag red">Required before log out</span>
+      <div class="compliance-item">
+        <div class="compliance-head">
+          <strong>Fuel / DEF / water level checked</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item">
+        <div class="compliance-head">
+          <strong>New leaks / damage / dash lights checked</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item">
+        <div class="compliance-head">
+          <strong>Windows / cameras cleaned</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item">
+        <div class="compliance-head">
+          <strong>Truck secured / gear put away</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <div class="compliance-item">
+        <div class="compliance-head">
+          <strong>End-of-day issues documented</strong>
+          <select onchange="toggleCompliance(this)">
+            <option>In Compliance</option>
+            <option>Not In Compliance</option>
+          </select>
+        </div>
+        <div class="noncompliance-required">
+          <div>
+            <label>If Not In Compliance: Photo Required</label>
+            <input type="file" accept="image/*" capture="environment">
+          </div>
+          <div>
+            <label>If Not In Compliance: Comment Required</label>
+            <textarea placeholder="Describe what is not in compliance, location, and what you observed."></textarea>
+          </div>
+          <div>
+            <label>Notify Maintenance</label>
+            <select>
+              <option>Automatically determined by system</option>
+              <option>Driver also requests maintenance review</option>
+            </select>
+          </div>
+        </div>
+        <div class="auto-classification">
+          <b>System Auto-Classification</b>
+          <div class="classification-grid">
+            <div class="classification-box"><b>Severity</b><span class="auto-severity">Auto selected</span></div>
+            <div class="classification-box"><b>Vehicle Status</b><span class="auto-status">Auto selected</span></div>
+            <div class="classification-box"><b>Next Action</b><span class="auto-action">Auto selected</span></div>
+          </div>
+        </div>
+        <div class="oos-box">
+          <b>⚠ Potential Out of Service Item</b><br>
+          This status is determined by the system based on DOT-style defect rules and company policy. Driver cannot override the classification.
+        </div>
+        <div class="required-note">Photo + comment required for any item marked Not In Compliance.</div>
+      </div>
+
+      <label>General Post-Trip Notes</label>
+      <textarea placeholder="Optional general notes..."></textarea>
+      <button class="btn greenbtn full bigbtn">Submit Post-Trip + Unlock Log Out</button>
+    </div>
+  </div>
+
+  <div class="section notice">
+    <b>Notification Rule:</b> When any pre-trip or post-trip item is marked Not In Compliance, the photo and comment fields appear and are required before submission. Chief and Field Manager are automatically notified.
+  </div>
+</section>
+
+<section id="pm" class="tab">
+  <h1 class="page-title">50-Hour PM</h1>
+  <p class="page-sub">Loaded automatically from the assigned Commercial Freightliner checklist template.</p>
+
+  <div class="card">
+    <h2>50-Hour PM Checklist</h2>
+    <div class="checkrow"><span>Fluids / belts / hoses checked</span><input type="checkbox"></div>
+<div class="checkrow"><span>Hi-rail wheels / pins / hydraulics checked</span><input type="checkbox"></div>
+<div class="checkrow"><span>Shunts / encoder belts checked</span><input type="checkbox"></div>
+<div class="checkrow"><span>Leaks / suspension / frame checked</span><input type="checkbox"></div>
+<div class="checkrow"><span>Generator / couplant system checked</span><input type="checkbox"></div>
+
+    <label>50-Hour PM Notes</label>
+    <textarea placeholder="Add PM notes, issues, or repairs needed..."></textarea>
+    <button class="btn full bigbtn">Submit 50-Hour PM + Notify Chief/Field Manager</button>
+  </div>
+</section>
+
+<section id="monthly" class="tab">
+  <h1 class="page-title">Monthly Checklist</h1>
+  <p class="page-sub">Monthly service items are automatic from the assigned checklist template.</p>
+
+  <div class="card">
+    <h2>Automatic Monthly Service Items</h2>
+    <div class="info">
+      <b>Auto-schedule rule:</b> When a service is checked off and submitted, the system calculates the next due date based on the completion date and automatically reminds the assigned employee, Chief, and Field Manager before it is due.
+    </div>
+
+    <div class="service-schedule">
+      <div class="service-head">
+        <strong>Oil + Filter</strong>
+        <input type="checkbox" onchange="toggleServiceComplete(this, 'Oil + Filter', 90)">
+      </div>
+      <div class="service-details">
+        <div>
+          <label>Completed Date</label>
+          <input type="date" onchange="calculateNextDue(this, 90)">
+        </div>
+        <div>
+          <label>Current Mileage</label>
+          <input placeholder="Example: 88,214">
+        </div>
+        <div>
+          <label>Interval</label>
+          <input value="5k–10k miles / approx. 90 days" readonly>
+        </div>
+      </div>
+      <div class="next-due-box"><b>Next Due:</b> Auto-calculates after completion date is entered.</div>
+    </div>
+
+    <div class="service-schedule">
+      <div class="service-head">
+        <strong>Fuel / Air Filters</strong>
+        <input type="checkbox" onchange="toggleServiceComplete(this, 'Fuel / Air Filters', 180)">
+      </div>
+      <div class="service-details">
+        <div>
+          <label>Completed Date</label>
+          <input type="date" onchange="calculateNextDue(this, 180)">
+        </div>
+        <div>
+          <label>Current Mileage</label>
+          <input placeholder="Example: 88,214">
+        </div>
+        <div>
+          <label>Interval</label>
+          <input value="15k–25k miles / approx. 180 days" readonly>
+        </div>
+      </div>
+      <div class="next-due-box"><b>Next Due:</b> Auto-calculates after completion date is entered.</div>
+    </div>
+
+    <div class="service-schedule">
+      <div class="service-head">
+        <strong>Hydraulics + Shunts Inspection</strong>
+        <input type="checkbox" onchange="toggleServiceComplete(this, 'Hydraulics + Shunts Inspection', 120)">
+      </div>
+      <div class="service-details">
+        <div>
+          <label>Completed Date</label>
+          <input type="date" onchange="calculateNextDue(this, 120)">
+        </div>
+        <div>
+          <label>Current Mileage / Hours</label>
+          <input placeholder="Mileage or hours">
+        </div>
+        <div>
+          <label>Interval</label>
+          <input value="Every 3–4 months" readonly>
+        </div>
+      </div>
+      <div class="next-due-box"><b>Next Due:</b> Auto-calculates after completion date is entered.</div>
+    </div>
+
+    <div class="service-schedule">
+      <div class="service-head">
+        <strong>Couplant Canister Replacement</strong>
+        <input type="checkbox" onchange="toggleServiceComplete(this, 'Couplant Canister Replacement', 90)">
+      </div>
+      <div class="service-details">
+        <div>
+          <label>Completed Date</label>
+          <input type="date" onchange="calculateNextDue(this, 90)">
+        </div>
+        <div>
+          <label>Current Mileage / Hours</label>
+          <input placeholder="Mileage or hours">
+        </div>
+        <div>
+          <label>Interval</label>
+          <input value="Quarterly" readonly>
+        </div>
+      </div>
+      <div class="next-due-box"><b>Next Due:</b> Auto-calculates after completion date is entered.</div>
+    </div>
+
+    <div class="service-schedule">
+      <div class="service-head">
+        <strong>Annual DOT Inspection</strong>
+        <input type="checkbox" onchange="toggleServiceComplete(this, 'Annual DOT Inspection', 365)">
+      </div>
+      <div class="service-details">
+        <div>
+          <label>Completed Date</label>
+          <input type="date" onchange="calculateNextDue(this, 365)">
+        </div>
+        <div>
+          <label>Inspection Document / Sticker</label>
+          <input type="file" accept="image/*,.pdf">
+        </div>
+        <div>
+          <label>Interval</label>
+          <input value="Yearly" readonly>
+        </div>
+      </div>
+      <div class="next-due-box"><b>Next Due:</b> Auto-calculates 1 year after completion date.</div>
+    </div>
+
+    <div class="service-schedule">
+      <div class="service-head">
+        <strong>Annual Hi-Rail Inspection</strong>
+        <input type="checkbox" onchange="toggleServiceComplete(this, 'Annual Hi-Rail Inspection', 365)">
+      </div>
+      <div class="service-details">
+        <div>
+          <label>Completed Date</label>
+          <input type="date" onchange="calculateNextDue(this, 365)">
+        </div>
+        <div>
+          <label>Inspection Document / Sticker</label>
+          <input type="file" accept="image/*,.pdf">
+        </div>
+        <div>
+          <label>Interval</label>
+          <input value="Yearly" readonly>
+        </div>
+      </div>
+      <div class="next-due-box"><b>Next Due:</b> Auto-calculates 1 year after completion date.</div>
+    </div>
+
+    <label>Monthly Notes</label>
+    <textarea placeholder="Add monthly checklist notes..."></textarea>
+
+    <div class="notice">
+      <b>Reminder Notifications:</b><br>
+      The system will notify the assigned employee before the next due date, then escalate to the Chief and Field Manager if the service becomes overdue.
+    </div>
+<button class="btn full bigbtn">Submit Monthly Checklist + Notify Chief/Field Manager</button>
+  </div>
+</section>
+
+
+<section id="service" class="tab">
+  <h1 class="page-title">Service History</h1>
+  <p class="page-sub">View recent service as a timeline and submit new service records.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Add Service Record</h2>
+      <div class="formrow"><input placeholder="Location"><input placeholder="Company / shop"></div>
+      <div class="formrow"><input placeholder="Person who completed service"><input placeholder="Mileage / hours"></div>
+      <label>Service Performed</label>
+      <select><option>Oil + Filter</option><option>Fuel / Air Filters</option><option>Hydraulics + Shunts</option><option>Encoder Belts</option><option>Tires</option><option>Other</option></select>
+      <label>Notes</label>
+      <textarea placeholder="What was done? Parts? Fluids? Anything to watch?"></textarea>
+      <label>Photo / Document</label>
+      <input type="file" accept="image/*,.pdf">
+      <button class="btn full">Submit Service Record + Notify Chief/Field Manager</button>
+    </div>
+
+    <div class="card">
+      <h2>Service Timeline</h2>
+      <div class="service-timeline">
+        <div class="service-event green">
+          <b>May 21 — Oil + Filter</b><br>
+          <span class="mini">Fleet Service Center • Mobile, AL • Next due: 93,214 mi</span>
+        </div>
+        <div class="service-event green">
+          <b>May 12 — Tire Rotation</b><br>
+          <span class="mini">Roadside Tire Co. • Pensacola, FL • Monitor during weekly PM</span>
+        </div>
+        <div class="service-event yellow">
+          <b>April 28 — Encoder Belt Replaced</b><br>
+          <span class="mini">Internal repair • Monitor weekly</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section id="crewnotes" class="tab">
+  <h1 class="page-title">Crew Notes</h1>
+  <p class="page-sub">Read notes left by the previous crew and create notes for the next crew assigned to this truck.</p>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Previous Crew Notes</h2>
+      <div class="crew-note previous">
+        <b>Yesterday — Driver A</b><br>
+        <span class="mini">Truck pulls slightly right. Tire shop scheduled. Monitor front tire.</span>
+      </div>
+      <div class="crew-note previous">
+        <b>Last week — Driver B</b><br>
+        <span class="mini">Encoder belt changed. Running normal.</span>
+      </div>
+      <div class="crew-note previous">
+        <b>Two weeks ago — Chief C</b><br>
+        <span class="mini">Hydraulic seep on rear carriage is being watched. No active leak during last inspection.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Create Note for Next Crew</h2>
+      <label>Note Category</label>
+      <select>
+        <option>General truck note</option>
+        <option>Mechanical issue</option>
+        <option>Technical issue</option>
+        <option>Service reminder</option>
+        <option>Route / yard note</option>
+        <option>Supplies / equipment</option>
+      </select>
+
+      <label>Priority</label>
+      <select>
+        <option>Normal</option>
+        <option>Important</option>
+        <option>Critical / must read</option>
+      </select>
+
+      <label>Note for Next Crew</label>
+      <textarea placeholder="Example: Truck pulls slightly right. DEF at half tank. Hydraulic seep on rear carriage. Encoder belt was changed yesterday."></textarea>
+
+      <label>Optional Photo / File</label>
+      <input type="file" accept="image/*,.pdf">
+
+      <button class="btn full">Save Note for Next Crew</button>
+    </div>
+  </div>
+
+  <div class="section notice">
+    <b>Visibility:</b> Notes saved here appear on the Today screen for the next assigned Driver Mechanic and Chief.
+  </div>
+</section>
+
+
+<section id="endshift" class="tab">
+  <h1 class="page-title">End Shift</h1>
+  <p class="page-sub">You cannot log out until the post-trip and required end-of-day items are complete.</p>
+
+  <div class="lock-banner">
+    <h2>🔒 Logout Locked</h2>
+    <p><b>Post-trip checklist must be submitted before you can end shift.</b></p>
+  </div>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h2>Required Before Logout</h2>
+      <div class="logout-list">
+        <div class="logout-item"><span>Post-trip checklist submitted</span><span class="tag red">Required</span></div>
+        <div class="logout-item"><span>End-of-day notes reviewed</span><span class="tag yellow">Required</span></div>
+        <div class="logout-item"><span>All Not In Compliance items include photo + comment</span><span class="tag red">Required</span></div>
+        <div class="logout-item"><span>Service records submitted, if any service was performed</span><span class="tag gray">If needed</span></div>
+      </div>
+      <button class="btn disabled full bigbtn">Submit & End Shift Locked</button>
+    </div>
+
+    <div class="card">
+      <h2>Crew Note Reminder</h2>
+      <p>If there is anything the next crew needs to know, create it in the Crew Notes tab before ending shift.</p>
+      <button class="btn full" onclick="showTab('crewnotes', document.querySelectorAll('.nav button')[7])">Open Crew Notes</button>
+      <div class="notice" style="margin-top:14px;">
+        <b>Reminder:</b> Crew notes are optional unless there is an active defect, service issue, missing equipment, route issue, or anything unusual about the truck.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="help" class="tab">
+  <h1 class="page-title">Need Help</h1>
+  <p class="page-sub">One-tap help requests notify your Chief and Field Manager.</p>
+
+  <div class="help-grid">
+    <button class="btn danger">Emergency</button>
+    <button class="btn yellow">Mechanical Issue</button>
+    <button class="btn yellow">Technical Issue</button>
+    <button class="btn secondary">DOT Question</button>
+    <button class="btn secondary">Route Issue</button>
+  </div>
+
+  <div class="section card">
+    <h2>Emergency Contacts</h2>
+    <table class="table">
+      <tr><th>Contact</th><th>Role</th><th>Phone / Email</th></tr>
+      <tr><td>Assigned Chief</td><td>Chief</td><td>chief@sperryrail.com</td></tr>
+      <tr><td>Field Manager</td><td>Field Manager</td><td>field.manager@sperryrail.com</td></tr>
+      <tr><td>Mechanical Support</td><td>Maintenance</td><td>maintenance@sperryrail.com</td></tr>
+      <tr><td>Roadmaster</td><td>Subdivision Contact</td><td>(555) 555-1001</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <h2>Submit Help Request</h2>
+    <label>Issue Type</label>
+    <select>
+      <option>Mechanical issue</option>
+      <option>Technical issue</option>
+      <option>DOT question</option>
+      <option>Route issue</option>
+      <option>Emergency</option>
+      <option>Other</option>
+    </select>
+    <label>Details</label>
+    <textarea placeholder="Explain what is happening, where you are, and what help you need."></textarea>
+    <label>Photo / File</label>
+    <input type="file" accept="image/*,.pdf">
+    <button class="btn full">Send Help Request</button>
+  </div>
+</section>
+
+
+
+<section id="contacts" class="tab">
+  <h1 class="page-title">Contacts</h1>
+  <p class="page-sub">Quick contacts for your assigned truck, route, and verification workflow.</p>
+
+  <div class="route-banner">
+    <div class="label">Assigned Verification Workflow</div>
+    <div class="route-big">🟣 NONSTOP ROUTE</div>
+    <p><b>Linked Verifier:</b> Sarah Miller • VER-22</p>
+  </div>
+
+  <div class="grid grid3">
+    <div class="quick-contact manager">
+      <h3>Field Manager</h3>
+      <div class="name">Mike Reynolds</div>
+      <div class="mini">Phone: (555) 555-2100<br>Email: mike.reynolds@sperryrail.com</div>
+      <div class="quick-contact-actions">
+        <button class="btn">Call</button>
+        <button class="btn secondary">Email</button>
+      </div>
+    </div>
+
+    <div class="quick-contact chief">
+      <h3>Assigned Chief</h3>
+      <div class="name">John Carter</div>
+      <div class="mini">Phone: (555) 555-3100<br>Email: john.carter@sperryrail.com</div>
+      <div class="quick-contact-actions">
+        <button class="btn greenbtn">Call</button>
+        <button class="btn secondary">Email</button>
+      </div>
+    </div>
+
+    <div class="quick-contact verifier">
+      <h3>Linked Verifier</h3>
+      <div class="name">Sarah Miller</div>
+      <div class="mini">Phone: (555) 555-4100<br>Email: sarah.miller@sperryrail.com</div>
+      <span class="tag purple">Visible on Nonstop routes</span>
+      <div class="quick-contact-actions">
+        <button class="btn secondary">Call</button>
+        <button class="btn secondary">Email</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Who’s Assigned Today</h2>
+    <div class="grid grid4">
+      <div class="assignment-card"><span class="label">Driver Mechanic</span><br><b>Claudia Stearns</b></div>
+      <div class="assignment-card"><span class="label">Chief</span><br><b>John Carter</b></div>
+      <div class="assignment-card"><span class="label">Verifier</span><br><b>Sarah Miller</b></div>
+      <div class="assignment-card"><span class="label">Field Manager</span><br><b>Mike Reynolds</b></div>
+    </div>
+  </div>
+
+  <div class="section notice">
+    <b>Stop & Verify rule:</b> If this truck is assigned to a Stop & Verify route, the Linked Verifier card is hidden and the Chief submits defect counts directly.
+  </div>
+</section>
+
+
+<section id="binder" class="tab">
+  <h1 class="page-title">Route Binder</h1>
+  <p class="page-sub">Field reference for your assigned route and subdivision.</p>
+  <div class="section card">
+    <h2>Assigned Verification Workflow</h2>
+    <table class="table">
+      <tr><th>Route Type</th><th>Nightly Notification</th><th>Next-Day Requirement</th></tr>
+      <tr><td><span class="tag purple">Nonstop Route</span></td><td>Chief picture count sent to Driver + Verifier</td><td>Verifier confirms pictures checked</td></tr>
+    </table>
+  </div>
+
+
+  <div class="card">
+    <h2>Mobile Subdivision</h2>
+    <span class="tag blue">MP 0.0 to MP 138.4</span><span class="tag green">Current PDF</span>
+    <h4>Time & Track PDF</h4>
+    <div class="pdfbox"><b>Mobile Sub Time & Track.pdf</b><p class="mini">Effective: 05/01/2026</p><button class="btn">Open PDF</button><button class="btn secondary">Download Offline</button></div>
+    <h4>Yard Location</h4><p>Mobile Yard</p>
+    <h4>Contacts</h4>
+    <table class="table"><tr><th>Name</th><th>Phone</th><th>Email</th><th>Job Title</th><th>Coverage</th></tr><tr><td>John Smith</td><td>(555) 555-1001</td><td>john.smith@railroad.com</td><td>Roadmaster</td><td>MP 0.0 to MP 75.0</td></tr></table>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active')});
+  if(btn){btn.classList.add('active')}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleCompliance(select){
+  const item = select.closest('.compliance-item');
+  if(!item) return;
+
+  if(select.value === 'Not In Compliance'){
+    item.classList.add('show-required');
+    classifyDefect(item);
+  } else {
+    item.classList.remove('show-required');
+  }
+}
+
+function classifyDefect(item){
+  const rule = item.dataset.rule || 'general';
+  const classifications = {
+    fluids: {
+      severity: '🟡 Moderate',
+      status: 'Safe with caution / monitor',
+      action: 'Notify Chief + Field Manager. Maintenance review if leak, low fluid, or overheating is observed.',
+      critical: false
+    },
+    brakes_tires_lights: {
+      severity: '🔴 Critical / DOT Safety Sensitive',
+      status: 'Potential OOS — do not operate until reviewed',
+      action: 'Notify Chief, Field Manager, and Maintenance immediately.',
+      critical: true
+    },
+    hirail: {
+      severity: '🔴 Critical / Rail Safety Sensitive',
+      status: 'Potential OOS — do not operate on rail',
+      action: 'Notify Chief, Field Manager, and Maintenance immediately.',
+      critical: true
+    },
+    shunts_encoder: {
+      severity: '🔴 Critical / Testing System Safety',
+      status: 'Potential OOS for testing until reviewed',
+      action: 'Notify Chief, Field Manager, and Maintenance immediately.',
+      critical: true
+    },
+    safety_equipment: {
+      severity: '🟡 Moderate',
+      status: 'Safe with caution only if legally required safety equipment is present',
+      action: 'Notify Chief + Field Manager. Replace missing/expired equipment before dispatch when required.',
+      critical: false
+    },
+    general: {
+      severity: '🟡 Moderate',
+      status: 'Needs Chief / Field Manager decision',
+      action: 'Notify Chief + Field Manager.',
+      critical: false
+    }
+  };
+
+  const result = classifications[rule] || classifications.general;
+  const severity = item.querySelector('.auto-severity');
+  const status = item.querySelector('.auto-status');
+  const action = item.querySelector('.auto-action');
+  const boxes = item.querySelectorAll('.classification-box');
+
+  if(severity) severity.textContent = result.severity;
+  if(status) status.textContent = result.status;
+  if(action) action.textContent = result.action;
+
+  boxes.forEach(function(box){
+    if(result.critical){ box.classList.add('oos-critical'); }
+    else { box.classList.remove('oos-critical'); }
+  });
+}
+
+function calculateNextDue(input, days){
+  if(!input.value) return;
+  const completed = new Date(input.value + 'T00:00:00');
+  const next = new Date(completed);
+  next.setDate(next.getDate() + days);
+
+  const schedule = input.closest('.service-schedule');
+  const box = schedule.querySelector('.next-due-box');
+  const formatted = next.toLocaleDateString(undefined, {year:'numeric', month:'short', day:'numeric'});
+  const reminder = new Date(next);
+  reminder.setDate(reminder.getDate() - 14);
+  const reminderFormatted = reminder.toLocaleDateString(undefined, {year:'numeric', month:'short', day:'numeric'});
+
+  box.innerHTML = '<b>Next Due:</b> ' + formatted + '<br><span class="mini">Reminder notification starts: ' + reminderFormatted + '</span>';
+}
+
+function toggleServiceComplete(checkbox, name, days){
+  const schedule = checkbox.closest('.service-schedule');
+  const dateInput = schedule.querySelector('input[type="date"]');
+  if(checkbox.checked && dateInput && dateInput.value){
+    calculateNextDue(dateInput, days);
+  }
+}
+
+</script>
+</body>
+</html>
